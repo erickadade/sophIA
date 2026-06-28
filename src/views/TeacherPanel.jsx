@@ -9,7 +9,7 @@ import Modal from '../components/Modal'
 
 const TABS = ['Autores', 'Recursos', 'Consignas', 'Entregas', 'Alumnos']
 const PERIODOS = ['Antigüedad', 'Medieval', 'Moderna', 'Contemporánea']
-const TIPOS_RECURSO = ['texto', 'pdf', 'video', 'tiktok']
+const TIPOS_RECURSO = ['texto', 'pdf', 'video', 'tiktok', 'instagram', 'facebook', 'imagen']
 const CURSOS = ['1A', '1B', '2A', '2B', '3A', '3B', '4A', '4B', '5A', '5B']
 
 export default function TeacherPanel() {
@@ -447,15 +447,20 @@ function RecursoModal({ item, autores, recursos, onClose, onSaved }) {
             <textarea className="form-control" value={form.contenidoTexto} onChange={e => set('contenidoTexto', e.target.value)} rows={8} />
           </div>
         )}
-        {form.tipo === 'pdf' && (
+        {(form.tipo === 'pdf' || form.tipo === 'imagen') && (
           <div className="form-group">
-            <label>URL del PDF (link externo — Google Drive, etc.)</label>
+            <label>URL del archivo (link externo — Google Drive, etc.)</label>
             <input type="url" className="form-control" value={form.urlArchivo} onChange={e => set('urlArchivo', e.target.value)} placeholder="https://drive.google.com/..." />
           </div>
         )}
-        {(form.tipo === 'video' || form.tipo === 'tiktok') && (
+        {(form.tipo === 'video' || form.tipo === 'tiktok' || form.tipo === 'instagram' || form.tipo === 'facebook') && (
           <div className="form-group">
-            <label>URL de embed ({form.tipo === 'video' ? 'ej: https://www.youtube.com/embed/...' : 'ej: https://www.tiktok.com/embed/v2/...'})</label>
+            <label>URL de embed ({
+              form.tipo === 'video' ? 'ej: https://www.youtube.com/embed/...' :
+              form.tipo === 'tiktok' ? 'ej: https://www.tiktok.com/embed/v2/...' :
+              form.tipo === 'instagram' ? 'ej: https://www.instagram.com/reel/.../embed' :
+              'ej: código de embed de Facebook Video/Page Plugin'
+            })</label>
             <input type="url" className="form-control" value={form.urlEmbed} onChange={e => set('urlEmbed', e.target.value)} />
           </div>
         )}

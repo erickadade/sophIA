@@ -6,6 +6,9 @@ const TYPE_ICONS = {
   video: '🎬',
   tiktok: '📱',
   texto: '📝',
+  instagram: '📸',
+  facebook: '👍',
+  imagen: '🖼️',
 }
 
 const TYPE_LABELS = {
@@ -13,6 +16,9 @@ const TYPE_LABELS = {
   video: 'Video',
   tiktok: 'TikTok',
   texto: 'Texto',
+  instagram: 'Instagram',
+  facebook: 'Facebook',
+  imagen: 'Imagen',
 }
 
 export default function ResourceCard({ recurso, autorNombre }) {

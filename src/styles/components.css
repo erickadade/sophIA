@@ -320,6 +320,13 @@
   padding-bottom: 177%; /* 9:16 portrait */
   max-width: 340px;
 }
+.embed-wrapper--instagram {
+  padding-bottom: 125%;
+  max-width: 400px;
+}
+.embed-wrapper--facebook {
+  max-width: 500px;
+}
 .pdf-link-box {
   display: flex;
   flex-direction: column;
