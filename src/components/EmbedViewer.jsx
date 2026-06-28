@@ -27,18 +27,47 @@ export default function EmbedViewer({ tipo, urlEmbed, urlArchivo, contenidoTexto
     )
   }
 
-  if (tipo === 'pdf') {
+  if (tipo === 'instagram') {
+    return (
+      <div className="embed-wrapper embed-wrapper--instagram">
+        <iframe
+          src={urlEmbed}
+          title="Instagram"
+          frameBorder="0"
+          allow="autoplay"
+          allowFullScreen
+        />
+      </div>
+    )
+  }
+
+  if (tipo === 'facebook') {
+    return (
+      <div className="embed-wrapper embed-wrapper--facebook">
+        <iframe
+          src={urlEmbed}
+          title="Facebook"
+          frameBorder="0"
+          allow="autoplay"
+          allowFullScreen
+        />
+      </div>
+    )
+  }
+
+  if (tipo === 'pdf' || tipo === 'imagen') {
+    const esPdf = tipo === 'pdf'
     return (
       <div className="pdf-link-box">
-        <div className="pdf-icon">📄</div>
-        <p>Este recurso es un PDF alojado externamente.</p>
+        <div className="pdf-icon">{esPdf ? '📄' : '🖼️'}</div>
+        <p>{esPdf ? 'Este recurso es un PDF alojado externamente.' : 'Esta es una imagen alojada externamente.'}</p>
         <a
           href={urlArchivo}
           target="_blank"
           rel="noopener noreferrer"
           className="btn btn-primary"
         >
-          Abrir PDF
+          {esPdf ? 'Abrir PDF' : 'Abrir imagen'}
         </a>
       </div>
     )

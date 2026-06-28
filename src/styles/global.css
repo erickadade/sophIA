@@ -201,10 +201,13 @@ select.form-control {
   text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
 }
-.resource-type-badge.tipo-pdf    { background: var(--color-terracotta-100); color: var(--color-terracotta-700); }
-.resource-type-badge.tipo-video  { background: var(--color-gold-100); color: var(--color-gold-700); }
-.resource-type-badge.tipo-tiktok { background: var(--color-ink-100); color: var(--color-ink-700); }
-.resource-type-badge.tipo-texto  { background: var(--color-olive-100); color: var(--color-olive-700); }
+.resource-type-badge.tipo-pdf       { background: var(--color-terracotta-100); color: var(--color-terracotta-700); }
+.resource-type-badge.tipo-video     { background: var(--color-gold-100); color: var(--color-gold-700); }
+.resource-type-badge.tipo-tiktok    { background: var(--color-ink-100); color: var(--color-ink-700); }
+.resource-type-badge.tipo-texto     { background: var(--color-olive-100); color: var(--color-olive-700); }
+.resource-type-badge.tipo-instagram { background: var(--color-terracotta-50); color: var(--color-terracotta-900); }
+.resource-type-badge.tipo-facebook  { background: var(--color-ink-50); color: var(--color-ink-900); }
+.resource-type-badge.tipo-imagen    { background: var(--color-gold-50); color: var(--color-gold-900); }
 
 /* ── Page headers ───────────────────────────────────────────── */
 .page-header {
