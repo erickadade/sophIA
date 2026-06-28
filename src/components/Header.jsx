@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { signOut } from 'firebase/auth'
 import { auth } from '../lib/firebase'
@@ -7,6 +8,11 @@ export default function Header() {
   const { user, userData } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  useEffect(() => {
+    setMenuOpen(false)
+  }, [location.pathname])
 
   const handleLogout = async () => {
     await signOut(auth)
@@ -23,7 +29,16 @@ export default function Header() {
           <img src="/sophia-iso.svg" alt="" className="site-logo__owl" />
         </Link>
 
-        <nav className="site-nav">
+        <button
+          className="nav-toggle"
+          aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen(o => !o)}
+        >
+          {menuOpen ? '✕' : '☰'}
+        </button>
+
+        <nav className={`site-nav${menuOpen ? ' site-nav--open' : ''}`}>
           <Link to="/" className={`nav-link ${isActive('/') && location.pathname === '/' ? 'nav-link--active' : ''}`}>
             Línea de tiempo
           </Link>
