@@ -187,3 +187,8 @@
   /* ── terra alias (para el wordmark) ─────────────────────────── */
   --terra: var(--color-terracotta-500);
 }
+
+/* ── Breakpoints (no son custom properties — usarlos como referencia en @media)
+   Tablet : max-width: 768px
+   Mobile : max-width: 480px
+   ─────────────────────────────────────────────────────────────────────────── */
