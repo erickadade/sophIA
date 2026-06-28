@@ -584,3 +584,33 @@
 
 /* ── Texto secundario helpers ───────────────────────────────── */
 .text-secondary { color: var(--text-secondary); }
+
+/* ── Responsive: mobile (max-width: 480px) ──────────────────── */
+@media (max-width: 480px) {
+  .site-header__inner {
+    padding: 0 var(--space-4);
+  }
+
+  .modal-header,
+  .modal-body {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+  .modal-overlay {
+    padding: var(--space-3);
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: var(--gap-sm);
+  }
+
+  .author-profile__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+  .author-profile__name {
+    font-size: var(--text-3xl);
+  }
+}
