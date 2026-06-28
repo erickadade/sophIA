@@ -19,7 +19,8 @@ export default function Header() {
     <header className="site-header">
       <div className="site-header__inner">
         <Link to="/" className="site-logo">
-          soph<span className="site-logo__ia">IA</span>
+          <span>soph<span className="site-logo__ia">IA</span></span>
+          <img src="/sophia-iso.svg" alt="" className="site-logo__owl" />
         </Link>
 
         <nav className="site-nav">

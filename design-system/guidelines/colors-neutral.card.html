@@ -1,0 +1,88 @@
+<!-- @dsCard group="Colors" viewport="700x230" name="Surfaces & Neutrals" subtitle="Paper, card, ink scale — the foundations of every layout" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { background: var(--bg-base); padding: 24px 28px; font-family: var(--font-sans); }
+    .surfaces { display: flex; gap: 12px; margin-bottom: 20px; }
+    .surface-block {
+      flex: 1; padding: 14px 16px; border-radius: var(--radius-lg);
+      border: 1px solid var(--border-default);
+    }
+    .surface-name { font-size: 11px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; }
+    .surface-val { font-size: 10px; color: var(--text-tertiary); font-family: var(--font-mono); }
+    .surface-token { font-size: 9px; color: var(--color-terracotta-400); margin-top: 4px; }
+    .ink-row { display: flex; gap: 0; border-radius: var(--radius-md); overflow: hidden; }
+    .swatch {
+      flex: 1; height: 44px; display: flex; flex-direction: column;
+      justify-content: flex-end; padding: 4px 6px;
+    }
+    .swatch-label { font-size: 9px; font-weight: 600; }
+    .group-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-tertiary); margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div style="margin-bottom:20px">
+    <div class="group-label">Superficies</div>
+    <div class="surfaces">
+      <div class="surface-block" style="background:var(--color-paper)">
+        <div class="surface-name">Paper</div>
+        <div class="surface-val">#f6f1e7</div>
+        <div class="surface-token">--bg-base</div>
+      </div>
+      <div class="surface-block" style="background:var(--color-card)">
+        <div class="surface-name">Card</div>
+        <div class="surface-val">#fffdf8</div>
+        <div class="surface-token">--bg-card</div>
+      </div>
+      <div class="surface-block" style="background:#ffffff">
+        <div class="surface-name">Elevated</div>
+        <div class="surface-val">#ffffff</div>
+        <div class="surface-token">--bg-elevated</div>
+      </div>
+      <div class="surface-block" style="background:var(--color-ink-50)">
+        <div class="surface-name">Subtle</div>
+        <div class="surface-val">#f8f4ec</div>
+        <div class="surface-token">--bg-subtle</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="group-label">Tinta — texto y bordes</div>
+    <div class="ink-row">
+      <div class="swatch" style="background:var(--color-ink-50)">
+        <span class="swatch-label" style="color:var(--color-ink-400)">50</span>
+      </div>
+      <div class="swatch" style="background:var(--color-ink-100)">
+        <span class="swatch-label" style="color:var(--color-ink-600)">100</span>
+      </div>
+      <div class="swatch" style="background:var(--color-ink-200)">
+        <span class="swatch-label" style="color:var(--color-ink-600)">200 · borde</span>
+      </div>
+      <div class="swatch" style="background:var(--color-ink-300)">
+        <span class="swatch-label" style="color:var(--color-ink-700)">300</span>
+      </div>
+      <div class="swatch" style="background:var(--color-ink-400)">
+        <span class="swatch-label" style="color:#fff">400</span>
+      </div>
+      <div class="swatch" style="background:var(--color-ink-600)">
+        <span class="swatch-label" style="color:#fff">600 · 2°</span>
+      </div>
+      <div class="swatch" style="background:var(--color-ink-700)">
+        <span class="swatch-label" style="color:#fff">700</span>
+      </div>
+      <div class="swatch" style="background:var(--color-ink-900)">
+        <span class="swatch-label" style="color:#fff">900 · texto</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

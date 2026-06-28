@@ -1,0 +1,90 @@
+<!-- @dsCard group="Components" viewport="700x360" name="Forms" subtitle="Input — with icon, label, helper text, error, and disabled states" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../../styles.css">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="../../_ds_bundle.js"></script>
+  <style>
+    body { background: var(--bg-base); padding: 24px 28px; margin: 0; }
+    .lbl { font-family: var(--font-sans); font-size: 10px; font-weight: 700;
+           letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-tertiary);
+           margin-bottom: 10px; }
+    .sec { margin-bottom: 20px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { Input } = window.SophIADesignSystem_67e1f4;
+
+    /* Inline SVG search icon */
+    const SearchIcon = () => (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+    );
+
+    function Demo() {
+      return (
+        <div>
+          <div className="sec">
+            <div className="lbl">Búsqueda con ícono</div>
+            <Input
+              placeholder="Buscá recursos, autores, temas…"
+              icon={<SearchIcon />}
+              fullWidth
+            />
+          </div>
+          <div className="grid">
+            <div className="sec">
+              <div className="lbl">Con etiqueta</div>
+              <Input
+                id="titulo"
+                label="Título de la tarea"
+                placeholder="Ej: Reflexión sobre el mito…"
+                helperText="Máximo 120 caracteres"
+                fullWidth
+              />
+            </div>
+            <div className="sec">
+              <div className="lbl">Estado de error</div>
+              <Input
+                label="Fecha de entrega"
+                defaultValue="30/02/2025"
+                error="La fecha no es válida."
+                fullWidth
+              />
+            </div>
+            <div className="sec" style={{marginBottom:0}}>
+              <div className="lbl">Deshabilitado</div>
+              <Input
+                label="Código de clase"
+                defaultValue="FIL-2025-B"
+                disabled
+                fullWidth
+              />
+            </div>
+            <div className="sec" style={{marginBottom:0}}>
+              <div className="lbl">Tamaños</div>
+              <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                <Input placeholder="sm" size="sm" />
+                <Input placeholder="md (default)" size="md" />
+                <Input placeholder="lg" size="lg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+  </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!-- @dsCard group="Type" viewport="700x300" name="Body — Source Sans 3" subtitle="Variable sans-serif for all UI text, labels, and descriptions" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { background: var(--bg-base); padding: 24px 32px; }
+    .specimen { margin-bottom: 14px; display: flex; align-items: baseline; gap: 16px; }
+    .meta { font-family: var(--font-sans); font-size: 10px; color: var(--text-tertiary);
+            white-space: nowrap; min-width: 160px; }
+    .divider { height: 1px; background: var(--border-subtle); margin: 14px 0; }
+    .sans { font-family: var(--font-sans); color: var(--text-primary); line-height: var(--leading-normal); }
+  </style>
+</head>
+<body>
+  <div class="specimen">
+    <div class="meta">20px · Regular</div>
+    <div class="sans" style="font-size:20px">Explorá las obras de los grandes pensadores de la historia.</div>
+  </div>
+  <div class="specimen">
+    <div class="meta">16px · Regular (body)</div>
+    <div class="sans" style="font-size:16px">Seleccioná un tema filosófico para comenzar. Cada sección está organizada por autor y período histórico.</div>
+  </div>
+  <div class="specimen">
+    <div class="meta">14px · Regular</div>
+    <div class="sans" style="font-size:14px;color:var(--text-secondary)">Platón · 428–348 a.C. · Filosofía antigua · Grecia</div>
+  </div>
+  <div class="divider"></div>
+  <div class="specimen">
+    <div class="meta">14px · SemiBold · label</div>
+    <div class="sans" style="font-size:14px;font-weight:600">Título de la tarea</div>
+  </div>
+  <div class="specimen">
+    <div class="meta">12px · SemiBold · wide</div>
+    <div class="sans" style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-tertiary)">Temas · Amor · Ética · Libertad · Justicia</div>
+  </div>
+  <div class="divider"></div>
+  <div style="display:flex;gap:24px;flex-wrap:wrap">
+    <div class="specimen" style="margin:0;flex-direction:column;gap:4px;align-items:flex-start">
+      <div class="meta" style="min-width:0">Weight range</div>
+      <div style="display:flex;gap:14px;align-items:baseline">
+        <span class="sans" style="font-weight:300;font-size:14px;color:var(--text-secondary)">Light</span>
+        <span class="sans" style="font-weight:400;font-size:14px">Regular</span>
+        <span class="sans" style="font-weight:500;font-size:14px">Medium</span>
+        <span class="sans" style="font-weight:600;font-size:14px">SemiBold</span>
+        <span class="sans" style="font-weight:700;font-size:14px">Bold</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

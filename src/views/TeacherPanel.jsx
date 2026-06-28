@@ -26,19 +26,25 @@ export default function TeacherPanel() {
   const [entregaDetalle, setEntregaDetalle] = useState(null)
 
   async function cargar() {
-    const [autSnap, recSnap, conSnap, entSnap, usrSnap] = await Promise.all([
-      getDocs(collection(db, 'autores')),
-      getDocs(collection(db, 'recursos')),
-      getDocs(query(collection(db, 'consignas'), orderBy('fechaCreacion', 'desc'))),
-      getDocs(query(collection(db, 'entregas'), orderBy('fechaEntrega', 'desc'))),
-      getDocs(query(collection(db, 'usuarios'), orderBy('nombre'))),
-    ])
-    setAutores(autSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => a.nombre.localeCompare(b.nombre)))
-    setRecursos(recSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => a.titulo.localeCompare(b.titulo)))
-    setConsignas(conSnap.docs.map(d => ({ id: d.id, ...d.data() })))
-    setEntregas(entSnap.docs.map(d => ({ id: d.id, ...d.data() })))
-    setAlumnos(usrSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(u => u.rol === 'alumno'))
-    setLoading(false)
+    try {
+      const [autSnap, recSnap, conSnap, entSnap, usrSnap] = await Promise.all([
+        getDocs(collection(db, 'autores')),
+        getDocs(collection(db, 'recursos')),
+        getDocs(query(collection(db, 'consignas'), orderBy('fechaCreacion', 'desc'))),
+        getDocs(query(collection(db, 'entregas'), orderBy('fechaEntrega', 'desc'))),
+        getDocs(query(collection(db, 'usuarios'), orderBy('nombre'))),
+      ])
+      setAutores(autSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => a.nombre.localeCompare(b.nombre)))
+      setRecursos(recSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => a.titulo.localeCompare(b.titulo)))
+      setConsignas(conSnap.docs.map(d => ({ id: d.id, ...d.data() })))
+      setEntregas(entSnap.docs.map(d => ({ id: d.id, ...d.data() })))
+      setAlumnos(usrSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(u => u.rol === 'alumno'))
+    } catch (err) {
+      console.error('Error al cargar datos:', err)
+      alert('Error de permisos en Firestore. ¿Las reglas de seguridad están publicadas?')
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => { cargar() }, [])

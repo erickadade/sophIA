@@ -1,0 +1,77 @@
+<!-- @dsCard group="Spacing" viewport="700x200" name="Shadows & Motion" subtitle="Warm-tinted shadow levels and transition presets" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { background: var(--color-ink-50); padding: 28px 32px; font-family: var(--font-sans); }
+    .row { display: flex; gap: 20px; margin-bottom: 24px; flex-wrap: wrap; }
+    .shadow-card {
+      background: var(--bg-card); border-radius: var(--radius-lg);
+      padding: 14px 18px; flex: 1; min-width: 100px; border: 1px solid var(--border-subtle);
+    }
+    .shadow-name { font-size: 11px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; }
+    .shadow-token { font-size: 9px; color: var(--color-terracotta-400); }
+    .motion-row { display: flex; gap: 20px; flex-wrap: wrap; }
+    .motion-item { display: flex; flex-direction: column; gap: 4px; }
+    .motion-name { font-size: 11px; font-weight: 700; color: var(--text-primary); }
+    .motion-val { font-size: 10px; color: var(--text-secondary); font-family: var(--font-mono); }
+    .divider { height: 1px; background: var(--border-default); margin: 0 0 16px; }
+    .group-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-tertiary); margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="group-label">Sombras</div>
+  <div class="row">
+    <div class="shadow-card" style="box-shadow:var(--shadow-xs)">
+      <div class="shadow-name">xs</div>
+      <div class="shadow-token">--shadow-xs</div>
+    </div>
+    <div class="shadow-card" style="box-shadow:var(--shadow-sm)">
+      <div class="shadow-name">sm</div>
+      <div class="shadow-token">--shadow-sm</div>
+    </div>
+    <div class="shadow-card" style="box-shadow:var(--shadow-md)">
+      <div class="shadow-name">md · hover</div>
+      <div class="shadow-token">--shadow-md</div>
+    </div>
+    <div class="shadow-card" style="box-shadow:var(--shadow-lg)">
+      <div class="shadow-name">lg</div>
+      <div class="shadow-token">--shadow-lg</div>
+    </div>
+    <div class="shadow-card" style="box-shadow:var(--shadow-xl)">
+      <div class="shadow-name">xl · modal</div>
+      <div class="shadow-token">--shadow-xl</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="group-label">Transiciones</div>
+  <div class="motion-row">
+    <div class="motion-item">
+      <div class="motion-name">Fast</div>
+      <div class="motion-val">120ms ease</div>
+      <div style="font-size:9px;color:var(--text-tertiary)">color, border, opacity</div>
+    </div>
+    <div class="motion-item">
+      <div class="motion-name">Normal</div>
+      <div class="motion-val">200ms ease</div>
+      <div style="font-size:9px;color:var(--text-tertiary)">card hover, transform</div>
+    </div>
+    <div class="motion-item">
+      <div class="motion-name">Slow</div>
+      <div class="motion-val">360ms ease</div>
+      <div style="font-size:9px;color:var(--text-tertiary)">panels, modals</div>
+    </div>
+    <div class="motion-item" style="margin-left:16px">
+      <div class="motion-name">Focus ring</div>
+      <div class="motion-val">3px · rgba(175,77,52,0.28)</div>
+      <div style="font-size:9px;color:var(--text-tertiary)">terracota at 28% opacity</div>
+    </div>
+  </div>
+</body>
+</html>

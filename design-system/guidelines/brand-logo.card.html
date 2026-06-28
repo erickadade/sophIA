@@ -1,0 +1,101 @@
+<!-- @dsCard group="Brand" viewport="700x700" name="Logo" subtitle="Isotype, logotype, and size variants" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { background: var(--bg-base); padding: 28px 32px; font-family: var(--font-sans); }
+    .lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+           color: var(--text-tertiary); margin-bottom: 12px; }
+    .divider { width: 1px; background: var(--border-default); flex-shrink: 0; }
+    .row { display: flex; align-items: flex-end; gap: 28px; flex-wrap: wrap; margin-bottom: 28px; }
+    .size-col { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .size-lbl { font-size: 10px; color: var(--text-tertiary); }
+    .on-dark { background: var(--color-ink-900); padding: 20px 28px; border-radius: var(--radius-lg);
+               display: inline-flex; align-items: center; gap: 14px; }
+  </style>
+</head>
+<body>
+
+  <!-- Isotype — SVG scales perfectly, uses transparency to show paper bg -->
+  <div style="margin-bottom:28px">
+    <div class="lbl">Isotipo</div>
+    <div class="row">
+      <div class="size-col">
+        <img src="../assets/logo/sophia-iso.svg" width="100" height="150" alt="sophIA isotype grande">
+        <span class="size-lbl">Grande</span>
+      </div>
+      <div class="divider" style="height:110px"></div>
+      <div class="size-col">
+        <img src="../assets/logo/sophia-iso.svg" width="64" height="96" alt="">
+        <span class="size-lbl">Mediano</span>
+      </div>
+      <div class="divider" style="height:80px"></div>
+      <div class="size-col">
+        <img src="../assets/logo/sophia-iso.svg" width="40" height="60" alt="">
+        <span class="size-lbl">Pequeño</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logotype -->
+  <div style="margin-bottom:28px">
+    <div class="lbl">Logotipo combinado</div>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+      <div style="font-family:var(--font-serif);font-size:52px;font-weight:700;line-height:1">
+        <span style="color:var(--text-primary)">soph</span><span style="color:var(--accent-primary)">IA</span>
+      </div>
+      <img src="../assets/logo/sophia-iso.svg" width="48" height="72" alt="">
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="font-family:var(--font-serif);font-size:32px;font-weight:700;line-height:1">
+        <span style="color:var(--text-primary)">soph</span><span style="color:var(--accent-primary)">IA</span>
+      </div>
+      <img src="../assets/logo/sophia-iso.svg" width="30" height="45" alt="">
+    </div>
+  </div>
+
+  <!-- Favicon sizes -->
+  <div style="margin-bottom:28px">
+    <div class="lbl">Favicon / App icon</div>
+    <div style="display:flex;gap:24px;align-items:flex-end">
+      <div class="size-col">
+        <img src="../assets/logo/sophia-iso.svg" width="48" height="72" alt="">
+        <span class="size-lbl">48 px</span>
+      </div>
+      <div class="size-col">
+        <img src="../assets/logo/sophia-iso.svg" width="32" height="48" alt="">
+        <span class="size-lbl">32 px</span>
+      </div>
+      <div class="size-col">
+        <img src="../assets/logo/sophia-iso.svg" width="24" height="36" alt="">
+        <span class="size-lbl">24 px</span>
+      </div>
+      <div class="size-col">
+        <img src="../assets/logo/sophia-iso.svg" width="16" height="24" alt="">
+        <span class="size-lbl">16 px</span>
+      </div>
+      <div class="size-col" style="margin-left:12px">
+        <div style="width:96px;height:96px;background:#fffdf8;border-radius:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(43,38,32,0.12)">
+          <img src="../assets/logo/sophia-iso.svg" width="62" height="93" alt="App icon">
+        </div>
+        <span class="size-lbl">App icon</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- On dark — CSS filter convierte terracota a crema; áreas transparentes quedan oscuras -->
+  <div>
+    <div class="lbl">Sobre fondo oscuro</div>
+    <div class="on-dark">
+      <div style="font-family:var(--font-serif);font-size:30px;font-weight:700;line-height:1;color:#f6f1e7">
+        soph<span style="color:var(--color-terracotta-300)">IA</span>
+      </div>
+      <img src="../assets/logo/sophia-iso.svg" width="22" height="33" alt=""
+           style="filter:brightness(0) invert(1) sepia(0.15) saturate(0.6) brightness(1.05)">
+    </div>
+  </div>
+
+</body>
+</html>

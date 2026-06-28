@@ -1,0 +1,76 @@
+<!-- @dsCard group="Colors" viewport="700x300" name="Brand Accents" subtitle="Terracotta · Olive · Gold — the three accent families" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { background: var(--bg-base); padding: 24px 28px; font-family: var(--font-sans); }
+    .row { display: flex; gap: 0; margin-bottom: 20px; border-radius: var(--radius-md); overflow: hidden; }
+    .swatch {
+      flex: 1; height: 56px; position: relative; cursor: default;
+      display: flex; flex-direction: column; justify-content: flex-end; padding: 4px 6px;
+    }
+    .swatch-label { font-size: 9px; font-weight: 600; opacity: 0; transition: opacity 0.15s; }
+    .swatch:hover .swatch-label { opacity: 1; }
+    .group-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-tertiary); margin-bottom: 8px;
+    }
+    .dark-text { color: rgba(43,38,32,0.75); }
+    .light-text { color: rgba(255,255,255,0.8); }
+    .main-mark { position: absolute; top: 6px; right: 6px; width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.5); }
+  </style>
+</head>
+<body>
+
+  <div style="margin-bottom:16px">
+    <div class="group-label">Terracota — acento principal</div>
+    <div class="row">
+      <div class="swatch" style="background:var(--color-terracotta-50)"><span class="swatch-label dark-text">50 #faf2ef</span></div>
+      <div class="swatch" style="background:var(--color-terracotta-100)"><span class="swatch-label dark-text">100</span></div>
+      <div class="swatch" style="background:var(--color-terracotta-200)"><span class="swatch-label dark-text">200</span></div>
+      <div class="swatch" style="background:var(--color-terracotta-300)"><span class="swatch-label dark-text">300</span></div>
+      <div class="swatch" style="background:var(--color-terracotta-500)">
+        <div class="main-mark"></div>
+        <span class="swatch-label light-text">500 · #af4d34</span>
+      </div>
+      <div class="swatch" style="background:var(--color-terracotta-700)"><span class="swatch-label light-text">700 #8b3a26</span></div>
+      <div class="swatch" style="background:var(--color-terracotta-900)"><span class="swatch-label light-text">900</span></div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:16px">
+    <div class="group-label">Oliva — temas filosóficos</div>
+    <div class="row">
+      <div class="swatch" style="background:var(--color-olive-50)"><span class="swatch-label dark-text">50 #f0f2ec</span></div>
+      <div class="swatch" style="background:var(--color-olive-100)"><span class="swatch-label dark-text">100</span></div>
+      <div class="swatch" style="background:var(--color-olive-200)"><span class="swatch-label dark-text">200</span></div>
+      <div class="swatch" style="background:var(--color-olive-300)"><span class="swatch-label dark-text">300</span></div>
+      <div class="swatch" style="background:var(--color-olive-500)">
+        <div class="main-mark"></div>
+        <span class="swatch-label light-text">500 · #5c6b46</span>
+      </div>
+      <div class="swatch" style="background:var(--color-olive-700)"><span class="swatch-label light-text">700 #3f4a30</span></div>
+      <div class="swatch" style="background:var(--color-olive-900)"><span class="swatch-label light-text">900</span></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="group-label">Dorado — períodos históricos</div>
+    <div class="row">
+      <div class="swatch" style="background:var(--color-gold-50)"><span class="swatch-label dark-text">50 #faf5ea</span></div>
+      <div class="swatch" style="background:var(--color-gold-100)"><span class="swatch-label dark-text">100</span></div>
+      <div class="swatch" style="background:var(--color-gold-200)"><span class="swatch-label dark-text">200</span></div>
+      <div class="swatch" style="background:var(--color-gold-300)"><span class="swatch-label dark-text">300</span></div>
+      <div class="swatch" style="background:var(--color-gold-500)">
+        <div class="main-mark"></div>
+        <span class="swatch-label light-text">500 · #b8893f</span>
+      </div>
+      <div class="swatch" style="background:var(--color-gold-700)"><span class="swatch-label light-text">700 #8a6427</span></div>
+      <div class="swatch" style="background:var(--color-gold-900)"><span class="swatch-label light-text">900</span></div>
+    </div>
+  </div>
+
+</body>
+</html>

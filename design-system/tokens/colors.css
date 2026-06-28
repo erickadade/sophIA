@@ -1,0 +1,99 @@
+/* sophIA Design System — Color tokens
+   Three-tier structure:
+   1. Raw palette  — named by hue + weight
+   2. Semantic aliases — named by role
+*/
+
+:root {
+
+  /* ── Paper & Surfaces ──────────────────────────────────────── */
+  --color-paper:    #f6f1e7;   /* global page background — aged paper */
+  --color-card:     #fffdf8;   /* card surfaces — warm near-white */
+  --color-elevated: #ffffff;   /* modals, tooltips */
+
+  /* ── Ink (neutral / text / border scale) ───────────────────── */
+  --color-ink-900: #2b2620;
+  --color-ink-700: #4a4238;
+  --color-ink-600: #6b6256;
+  --color-ink-400: #9e9080;
+  --color-ink-300: #bdb09e;
+  --color-ink-200: #ddd2bd;   /* default border */
+  --color-ink-100: #ede5d5;   /* subtle border */
+  --color-ink-50:  #f8f4ec;   /* subtle background */
+
+  /* ── Terracotta (primary brand accent) ─────────────────────── */
+  --color-terracotta-900: #5c1e0f;
+  --color-terracotta-700: #8b3a26;
+  --color-terracotta-500: #af4d34;   /* ← brand primary */
+  --color-terracotta-400: #c46850;
+  --color-terracotta-300: #d4917f;
+  --color-terracotta-200: #e8c5bb;
+  --color-terracotta-100: #f3ddd8;
+  --color-terracotta-50:  #faf2ef;
+
+  /* ── Olive (secondary accent — topics / themes) ─────────────── */
+  --color-olive-900: #1e2415;
+  --color-olive-700: #3f4a30;
+  --color-olive-500: #5c6b46;   /* ← brand secondary */
+  --color-olive-300: #8fa679;
+  --color-olive-200: #c1cbaf;
+  --color-olive-100: #d8e0cd;
+  --color-olive-50:  #f0f2ec;
+
+  /* ── Gold (tertiary accent — dates / historical periods) ────── */
+  --color-gold-900: #4a3312;
+  --color-gold-700: #8a6427;
+  --color-gold-500: #b8893f;   /* ← brand tertiary */
+  --color-gold-300: #d4b87a;
+  --color-gold-200: #e5d0a8;
+  --color-gold-100: #eed9ad;
+  --color-gold-50:  #faf5ea;
+
+  /* ── State colors ───────────────────────────────────────────── */
+  --color-error:   #c0392b;
+  --color-success: #2d6a4f;
+  --color-warning: var(--color-gold-500);
+
+  /* ══════════════════════════════════════════════════════════════
+     SEMANTIC ALIASES
+     ══════════════════════════════════════════════════════════════ */
+
+  /* Backgrounds */
+  --bg-base:     var(--color-paper);
+  --bg-card:     var(--color-card);
+  --bg-elevated: var(--color-elevated);
+  --bg-subtle:   var(--color-ink-50);
+
+  /* Text */
+  --text-primary:   var(--color-ink-900);
+  --text-secondary: var(--color-ink-600);
+  --text-tertiary:  var(--color-ink-400);
+  --text-disabled:  var(--color-ink-300);
+  --text-on-accent: #ffffff;
+
+  /* Borders */
+  --border-subtle:  var(--color-ink-100);
+  --border-default: var(--color-ink-200);
+  --border-strong:  var(--color-ink-400);
+
+  /* Brand accents */
+  --accent-primary:         var(--color-terracotta-500);
+  --accent-primary-hover:   var(--color-terracotta-700);
+  --accent-primary-subtle:  var(--color-terracotta-50);
+  --accent-primary-muted:   var(--color-terracotta-100);
+
+  --accent-secondary:        var(--color-olive-500);
+  --accent-secondary-hover:  var(--color-olive-700);
+  --accent-secondary-subtle: var(--color-olive-50);
+  --accent-secondary-muted:  var(--color-olive-100);
+
+  --accent-tertiary:        var(--color-gold-500);
+  --accent-tertiary-hover:  var(--color-gold-700);
+  --accent-tertiary-subtle: var(--color-gold-50);
+  --accent-tertiary-muted:  var(--color-gold-100);
+
+  /* States */
+  --state-error:   var(--color-error);
+  --state-success: var(--color-success);
+  --state-warning: var(--color-warning);
+}

@@ -1,0 +1,11 @@
+/* sophIA Design System — global stylesheet
+   This file contains @import statements only. Do not add inline rules.
+   Consumers: link this single file to get all tokens and base styles.
+*/
+
+@import './tokens/fonts.css';
+@import './tokens/base.css';
+@import './tokens/colors.css';
+@import './tokens/typography.css';
+@import './tokens/spacing.css';
+@import './tokens/effects.css';

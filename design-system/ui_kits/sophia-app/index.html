@@ -1,0 +1,412 @@
+<!-- @dsCard group="sophIA App" viewport="1280x800" name="Biblioteca" subtitle="Interactive library — search, filter, browse, and resource detail" -->
+<!-- @startingPoint section="App" subtitle="sophIA — interactive library prototype" viewport="1280x800" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>sophIA — Biblioteca</title>
+  <link rel="stylesheet" href="../../styles.css">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    html, body, #root { margin: 0; height: 100%; overflow: hidden; }
+    * { box-sizing: border-box; }
+    input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-default); border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+
+    /* ════════════════════════════════════ ICONS */
+    const SVG = {
+      biblioteca:  `<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>`,
+      timeline:    `<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>`,
+      temas:       `<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>`,
+      tareas:      `<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="15" y2="16"/>`,
+      search:      `<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>`,
+      close:       `<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>`,
+      pdf:         `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>`,
+      video:       `<polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>`,
+      texto:       `<polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/>`,
+      reel:        `<polygon points="5 3 19 12 5 21 5 3"/>`,
+      external:    `<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>`,
+      download:    `<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>`,
+      plus:        `<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>`,
+    };
+    const Icon = ({ name, size=20, color='currentColor' }) => (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color}
+           strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+           dangerouslySetInnerHTML={{ __html: SVG[name] || '' }} />
+    );
+
+    /* ════════════════════════════════════ DATA */
+    const RESOURCES = [
+      { id:1, title:'Alegoría de la caverna', subtitle:'República, Libro VII', author:'Platón', period:'Antigua', type:'PDF', themes:['conocimiento','realidad','verdad'], year:'380 a.C.', description:'Prisioneros encadenados que solo ven sombras en una pared. La metáfora fundante del conocimiento filosófico occidental: Platón distingue entre apariencia (mundo sensible) y realidad (mundo de las ideas).' },
+      { id:2, title:'El mito de Sísifo', subtitle:'Ensayo sobre el absurdo', author:'Albert Camus', period:'Contemporánea', type:'PDF', themes:['absurdo','libertad','existencia'], year:'1942', description:'El único problema filosófico verdaderamente serio es el suicidio. Camus responde con la rebelión ante el absurdo: hay que imaginar a Sísifo feliz, dueño de su roca y su destino.' },
+      { id:3, title:'Ética a Nicómaco — Libro I', subtitle:'Sobre la felicidad y el bien', author:'Aristóteles', period:'Antigua', type:'PDF', themes:['ética','virtud','felicidad'], year:'350 a.C.', description:'Toda acción humana tiende hacia algún bien. El bien supremo es la eudaimonía — el florecimiento humano que se alcanza mediante la virtud y la contemplación.' },
+      { id:4, title:'El contrato social', subtitle:'Clase magistral grabada', author:'Rousseau', period:'Moderna', type:'Video', themes:['libertad','justicia','sociedad'], year:'1762 · 2024', description:'Clase grabada sobre la voluntad general y el pacto social como fundamento de la legitimidad política. Incluye análisis contextual y preguntas guía para el debate.' },
+      { id:5, title:'La condición humana', subtitle:'Capítulo I — La vita activa', author:'Hannah Arendt', period:'Contemporánea', type:'Texto', themes:['política','acción','libertad'], year:'1958', description:'Arendt distingue tres actividades fundamentales: labor, trabajo y acción. Solo la acción nos hace plenamente libres, pues trasciende la necesidad biológica y nos inscribe en el mundo compartido.' },
+      { id:6, title:'Meditaciones — Libro II', subtitle:'Fragmentos estoicos', author:'Marco Aurelio', period:'Antigua', type:'PDF', themes:['estoicismo','ética','razón'], year:'170 d.C.', description:'El diario íntimo de un emperador: reflexiones sobre el control de los impulsos, la naturaleza efímera del tiempo y el deber del sabio ante la adversidad de la vida.' },
+    ];
+
+    const THEMES = [
+      { id:1, name:'Amor',         count:8,  authors:'Platón · Sartre · Fromm' },
+      { id:2, name:'Ética',        count:14, authors:'Aristóteles · Kant · Singer' },
+      { id:3, name:'Libertad',     count:11, authors:'Rousseau · Camus · Sartre' },
+      { id:4, name:'Justicia',     count:9,  authors:'Platón · Rawls · Nozick' },
+      { id:5, name:'Conocimiento', count:12, authors:'Platón · Descartes · Hume' },
+      { id:6, name:'Existencia',   count:7,  authors:'Sartre · Camus · Heidegger' },
+    ];
+
+    const PHILOSOPHERS = [
+      { id:1, name:'Platón',        years:'428–348 a.C.',  period:'Antigua',       pos:8  },
+      { id:2, name:'Aristóteles',   years:'384–322 a.C.',  period:'Antigua',       pos:13 },
+      { id:3, name:'Marco Aurelio', years:'121–180 d.C.',  period:'Antigua',       pos:22 },
+      { id:4, name:'Tomás Aquino',  years:'1225–1274',     period:'Medieval',      pos:42 },
+      { id:5, name:'Descartes',     years:'1596–1650',     period:'Moderna',       pos:55 },
+      { id:6, name:'Rousseau',      years:'1712–1778',     period:'Moderna',       pos:62 },
+      { id:7, name:'Kant',          years:'1724–1804',     period:'Moderna',       pos:66 },
+      { id:8, name:'Nietzsche',     years:'1844–1900',     period:'Moderna',       pos:74 },
+      { id:9, name:'Arendt',        years:'1906–1975',     period:'Contemporánea', pos:82 },
+      { id:10,name:'Camus',         years:'1913–1960',     period:'Contemporánea', pos:85 },
+    ];
+
+    const TASKS = [
+      { id:1, title:'Comentario: Alegoría de la caverna',           due:'30 jun.', status:'pending',   resource:'Platón' },
+      { id:2, title:'Análisis del concepto de libertad en Camus',   due:'15 jul.', status:'pending',   resource:'Albert Camus' },
+      { id:3, title:'Comparación: virtud en Aristóteles y Kant',    due:'22 may.', status:'submitted', resource:'Aristóteles · Kant' },
+    ];
+
+    /* ════════════════════════════════════ HELPERS */
+    const PS = {
+      Antigua:       { bg:'var(--color-gold-50)',        color:'var(--color-gold-700)',        border:'var(--color-gold-200)',        dot:'#b8893f' },
+      Medieval:      { bg:'var(--color-ink-50)',         color:'var(--color-ink-600)',         border:'var(--color-ink-200)',         dot:'#9e9080' },
+      Moderna:       { bg:'var(--color-olive-50)',       color:'var(--color-olive-700)',       border:'var(--color-olive-200)',       dot:'#5c6b46' },
+      Contemporánea: { bg:'var(--color-terracotta-50)',  color:'var(--color-terracotta-700)',  border:'var(--color-terracotta-200)', dot:'#af4d34' },
+    };
+    const TYPE_ICON = { PDF:'pdf', Video:'video', Texto:'texto', Reel:'reel' };
+
+    const Chip = ({ children, bg, color, border, extra={} }) => (
+      <span style={{ fontFamily:'var(--font-sans)', fontSize:11, fontWeight:600, padding:'2px 8px', borderRadius:4, border:`1px solid ${border}`, background:bg, color, whiteSpace:'nowrap', lineHeight:1.4, ...extra }}>
+        {children}
+      </span>
+    );
+
+    /* ════════════════════════════════════ SIDEBAR */
+    const NAV = [
+      { id:'biblioteca', icon:'biblioteca', label:'Biblioteca' },
+      { id:'timeline',   icon:'timeline',   label:'Línea de tiempo' },
+      { id:'temas',      icon:'temas',      label:'Temas' },
+      { id:'tareas',     icon:'tareas',     label:'Tareas' },
+    ];
+
+    const Sidebar = ({ section, onNavigate }) => (
+      <div style={{ width:240, flexShrink:0, background:'var(--bg-card)', borderRight:'1px solid var(--border-default)', display:'flex', flexDirection:'column' }}>
+        <div style={{ padding:'20px 20px 16px', borderBottom:'1px solid var(--border-subtle)', display:'flex', alignItems:'center', gap:10 }}>
+          <div style={{ fontFamily:'var(--font-serif)', fontSize:26, fontWeight:700, lineHeight:1 }}>
+            <span style={{ color:'var(--text-primary)' }}>soph</span><span style={{ color:'var(--accent-primary)' }}>IA</span>
+          </div>
+          <img src="../../assets/logo/sophia-iso.svg" width="22" height="33" alt="" style={{flexShrink:0}} />
+        </div>
+        <nav style={{ flex:1, padding:'12px 8px' }}>
+          {NAV.map(item => {
+            const active = section === item.id;
+            return (
+              <div key={item.id} onClick={() => onNavigate(item.id)}
+                style={{ display:'flex', alignItems:'center', gap:10, padding:'9px 12px', borderRadius:'var(--radius-md)', cursor:'pointer', marginBottom:2, userSelect:'none', transition:'all var(--transition-fast)',
+                  background: active ? 'var(--accent-primary-subtle)' : 'transparent',
+                  color: active ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                  fontFamily:'var(--font-sans)', fontSize:14, fontWeight: active ? 600 : 400 }}>
+                <Icon name={item.icon} size={17} />
+                {item.label}
+                {active && <div style={{ marginLeft:'auto', width:3, height:16, borderRadius:2, background:'var(--accent-primary)' }} />}
+              </div>
+            );
+          })}
+        </nav>
+        <div style={{ padding:'12px 16px', borderTop:'1px solid var(--border-subtle)', display:'flex', alignItems:'center', gap:10 }}>
+          <div style={{ width:32, height:32, borderRadius:'50%', background:'var(--color-terracotta-100)', border:'1.5px solid var(--color-terracotta-200)', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'var(--font-serif)', fontWeight:700, fontSize:13, color:'var(--accent-primary)', flexShrink:0 }}>LA</div>
+          <div>
+            <div style={{ fontFamily:'var(--font-sans)', fontSize:13, fontWeight:600, color:'var(--text-primary)' }}>Lucía Arroyo</div>
+            <div style={{ fontFamily:'var(--font-sans)', fontSize:11, color:'var(--text-tertiary)' }}>Profesora</div>
+          </div>
+        </div>
+      </div>
+    );
+
+    /* ════════════════════════════════════ RESOURCE CARD */
+    const ResourceCard = ({ resource, onClick }) => {
+      const [hov, setHov] = React.useState(false);
+      const ps = PS[resource.period] || PS.Antigua;
+      return (
+        <div onClick={() => onClick(resource)} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+          style={{ background:'var(--bg-card)', borderRadius:'var(--radius-card)', cursor:'pointer', transition:'all var(--transition-normal)', padding:'18px 20px',
+            border:`1px solid ${hov ? 'var(--border-strong)' : 'var(--border-default)'}`,
+            boxShadow: hov ? 'var(--shadow-md)' : 'var(--shadow-xs)',
+            transform: hov ? 'translateY(-2px)' : 'none' }}>
+          <div style={{ display:'flex', justifyContent:'space-between', marginBottom:10 }}>
+            <span style={{ display:'inline-flex', alignItems:'center', gap:5, fontFamily:'var(--font-sans)', fontSize:11, fontWeight:600, padding:'2px 8px', borderRadius:4, background:'var(--accent-primary-subtle)', color:'var(--accent-primary)', border:'1px solid var(--color-terracotta-200)' }}>
+              <Icon name={TYPE_ICON[resource.type] || 'pdf'} size={12} />{resource.type}
+            </span>
+            <Chip bg={ps.bg} color={ps.color} border={ps.border}>{resource.period}</Chip>
+          </div>
+          <h3 style={{ fontFamily:'var(--font-serif)', fontSize:17, fontWeight:700, color:'var(--text-primary)', margin:'0 0 3px', lineHeight:1.3 }}>{resource.title}</h3>
+          <p style={{ fontFamily:'var(--font-sans)', fontSize:11, color:'var(--text-tertiary)', margin:'0 0 8px', fontStyle:'italic' }}>{resource.subtitle}</p>
+          <p style={{ fontFamily:'var(--font-sans)', fontSize:13, color:'var(--text-secondary)', margin:'0 0 12px', fontWeight:500 }}>
+            {resource.author}<span style={{ color:'var(--text-tertiary)', fontWeight:400 }}> · {resource.year}</span>
+          </p>
+          <div style={{ display:'flex', flexWrap:'wrap', gap:4 }}>
+            {resource.themes.map(t => <Chip key={t} bg="var(--accent-secondary-subtle)" color="var(--accent-secondary)" border="var(--color-olive-200)">{t}</Chip>)}
+          </div>
+        </div>
+      );
+    };
+
+    /* ════════════════════════════════════ RESOURCE DETAIL */
+    const ResourceDetail = ({ resource, onClose }) => {
+      const ps = PS[resource.period] || PS.Antigua;
+      return (
+        <div style={{ width:340, flexShrink:0, background:'var(--bg-card)', borderLeft:'1px solid var(--border-default)', display:'flex', flexDirection:'column', boxShadow:'-4px 0 20px rgba(43,38,32,0.07)', overflowY:'auto' }}>
+          <div style={{ padding:'20px 22px 14px', borderBottom:'1px solid var(--border-subtle)' }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:12 }}>
+              <div style={{ display:'flex', gap:6 }}>
+                <Chip bg="var(--accent-primary-subtle)" color="var(--accent-primary)" border="var(--color-terracotta-200)">{resource.type}</Chip>
+                <Chip bg={ps.bg} color={ps.color} border={ps.border}>{resource.period}</Chip>
+              </div>
+              <button onClick={onClose} style={{ background:'none', border:'none', cursor:'pointer', color:'var(--text-tertiary)', padding:4, display:'flex', borderRadius:4 }}>
+                <Icon name="close" size={18} />
+              </button>
+            </div>
+            <h2 style={{ fontFamily:'var(--font-serif)', fontSize:22, fontWeight:700, color:'var(--text-primary)', margin:'0 0 4px', lineHeight:1.3 }}>{resource.title}</h2>
+            <p style={{ fontFamily:'var(--font-sans)', fontSize:12, color:'var(--text-tertiary)', margin:0, fontStyle:'italic' }}>{resource.subtitle}</p>
+          </div>
+          <div style={{ padding:'20px 22px', flex:1 }}>
+            <div style={{ marginBottom:16 }}>
+              <div style={{ fontFamily:'var(--font-sans)', fontSize:10, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'var(--text-tertiary)', marginBottom:4 }}>Autor</div>
+              <div style={{ fontFamily:'var(--font-sans)', fontSize:15, fontWeight:600, color:'var(--text-primary)' }}>{resource.author}</div>
+              <div style={{ fontFamily:'var(--font-sans)', fontSize:12, color:'var(--text-tertiary)' }}>{resource.year}</div>
+            </div>
+            <div style={{ marginBottom:16 }}>
+              <div style={{ fontFamily:'var(--font-sans)', fontSize:10, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'var(--text-tertiary)', marginBottom:6 }}>Sobre este material</div>
+              <p style={{ fontFamily:'var(--font-sans)', fontSize:13, color:'var(--text-secondary)', lineHeight:1.7, margin:0 }}>{resource.description}</p>
+            </div>
+            <div style={{ marginBottom:22 }}>
+              <div style={{ fontFamily:'var(--font-sans)', fontSize:10, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'var(--text-tertiary)', marginBottom:8 }}>Temas</div>
+              <div style={{ display:'flex', flexWrap:'wrap', gap:5 }}>
+                {resource.themes.map(t => <Chip key={t} bg="var(--accent-secondary-subtle)" color="var(--accent-secondary)" border="var(--color-olive-200)" extra={{ fontSize:12, padding:'3px 9px' }}>{t}</Chip>)}
+              </div>
+            </div>
+            <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+              <button style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:7, height:40, background:'var(--accent-primary)', color:'#fff', border:'none', borderRadius:6, fontFamily:'var(--font-sans)', fontWeight:600, fontSize:14, cursor:'pointer', letterSpacing:'0.03em' }}>
+                <Icon name="external" size={15} color="#fff" /> Abrir material
+              </button>
+              <button style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:7, height:40, background:'transparent', color:'var(--text-primary)', border:'1.5px solid var(--border-default)', borderRadius:6, fontFamily:'var(--font-sans)', fontWeight:600, fontSize:14, cursor:'pointer' }}>
+                <Icon name="download" size={15} /> Descargar
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    /* ════════════════════════════════════ BIBLIOTECA VIEW */
+    const PERIODS = ['Todas','Antigua','Medieval','Moderna','Contemporánea'];
+    const BibliotecaView = ({ resources, search, onSearch, period, onPeriod, onResourceClick }) => (
+      <div style={{ flex:1, display:'flex', flexDirection:'column', minWidth:0 }}>
+        <div style={{ padding:'14px 24px', borderBottom:'1px solid var(--border-subtle)', background:'var(--bg-card)', display:'flex', alignItems:'center', gap:16, flexShrink:0 }}>
+          <h1 style={{ fontFamily:'var(--font-serif)', fontSize:22, fontWeight:700, color:'var(--text-primary)', margin:0, whiteSpace:'nowrap' }}>Biblioteca</h1>
+          <div style={{ flex:1, position:'relative' }}>
+            <span style={{ position:'absolute', left:10, top:'50%', transform:'translateY(-50%)', color:'var(--text-tertiary)', display:'flex', pointerEvents:'none' }}><Icon name="search" size={16} /></span>
+            <input type="search" placeholder="Buscá recursos, autores, temas…" value={search} onChange={e => onSearch(e.target.value)}
+              style={{ width:'100%', height:36, paddingLeft:34, paddingRight:12, fontFamily:'var(--font-sans)', fontSize:14, color:'var(--text-primary)', background:'var(--bg-base)', border:'1.5px solid var(--border-default)', borderRadius:6, outline:'none' }} />
+          </div>
+        </div>
+        <div style={{ padding:'10px 24px', borderBottom:'1px solid var(--border-subtle)', display:'flex', gap:6, alignItems:'center', flexShrink:0, background:'var(--bg-card)' }}>
+          <span style={{ fontFamily:'var(--font-sans)', fontSize:10, fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'var(--text-tertiary)', marginRight:4 }}>Período</span>
+          {PERIODS.map(p => {
+            const active = period === p;
+            return (
+              <button key={p} onClick={() => onPeriod(p)}
+                style={{ height:26, padding:'0 11px', borderRadius:4, cursor:'pointer', transition:'all 0.12s ease', fontFamily:'var(--font-sans)', fontSize:12,
+                  border:`1.5px solid ${active ? 'var(--accent-primary)' : 'var(--border-default)'}`,
+                  background: active ? 'var(--accent-primary-subtle)' : 'transparent',
+                  color: active ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                  fontWeight: active ? 600 : 400 }}>
+                {p}
+              </button>
+            );
+          })}
+        </div>
+        <div style={{ flex:1, overflowY:'auto', padding:24 }}>
+          {resources.length === 0
+            ? <div style={{ textAlign:'center', padding:'60px 0', color:'var(--text-tertiary)', fontFamily:'var(--font-sans)' }}>
+                <div style={{ fontFamily:'var(--font-serif)', fontSize:22, marginBottom:6, color:'var(--text-secondary)' }}>Sin resultados</div>
+                <div style={{ fontSize:14 }}>Probá con otro término o período.</div>
+              </div>
+            : <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))', gap:16 }}>
+                {resources.map(r => <ResourceCard key={r.id} resource={r} onClick={onResourceClick} />)}
+              </div>}
+        </div>
+      </div>
+    );
+
+    /* ════════════════════════════════════ TIMELINE VIEW */
+    const TimelineView = () => {
+      const [sel, setSel] = React.useState(null);
+      return (
+        <div style={{ flex:1, display:'flex', flexDirection:'column', minWidth:0 }}>
+          <div style={{ padding:'14px 24px', borderBottom:'1px solid var(--border-subtle)', background:'var(--bg-card)', flexShrink:0 }}>
+            <h1 style={{ fontFamily:'var(--font-serif)', fontSize:22, fontWeight:700, color:'var(--text-primary)', margin:0 }}>Línea de tiempo</h1>
+          </div>
+          <div style={{ flex:1, padding:'36px 48px', overflowX:'auto', overflowY:'auto' }}>
+            <div style={{ display:'flex', gap:18, marginBottom:28, flexWrap:'wrap' }}>
+              {Object.entries({ Antigua:'#b8893f', Medieval:'#9e9080', Moderna:'#5c6b46', Contemporánea:'#af4d34' }).map(([p, c]) => (
+                <div key={p} style={{ display:'flex', alignItems:'center', gap:6 }}>
+                  <div style={{ width:10, height:10, borderRadius:'50%', background:c }} />
+                  <span style={{ fontFamily:'var(--font-sans)', fontSize:12, color:'var(--text-secondary)' }}>{p}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{ position:'relative', height:160, minWidth:800 }}>
+              <div style={{ position:'absolute', top:70, left:0, right:0, height:2, background:'var(--border-default)', borderRadius:1 }} />
+              {['500 a.C.','0','1000','1500','hoy'].map((lbl, i) => (
+                <div key={lbl} style={{ position:'absolute', top:78, left:`${i*25}%`, fontFamily:'var(--font-sans)', fontSize:10, color:'var(--text-tertiary)', transform:'translateX(-50%)' }}>{lbl}</div>
+              ))}
+              {PHILOSOPHERS.map((phil, i) => {
+                const active = sel?.id === phil.id;
+                const ps = PS[phil.period] || PS.Antigua;
+                const above = i % 2 === 0;
+                return (
+                  <div key={phil.id} onClick={() => setSel(active ? null : phil)}
+                    style={{ position:'absolute', left:`${phil.pos}%`, top: above ? 8 : 78, textAlign:'center', cursor:'pointer', transform:'translateX(-50%)' }}>
+                    {above && <>
+                      <div style={{ fontFamily:'var(--font-sans)', fontSize:10, fontWeight:600, color: active ? 'var(--accent-primary)' : 'var(--text-secondary)', whiteSpace:'nowrap', marginBottom:2 }}>{phil.name}</div>
+                      <div style={{ fontFamily:'var(--font-sans)', fontSize:9, color:'var(--text-tertiary)', whiteSpace:'nowrap', marginBottom:4 }}>{phil.years}</div>
+                    </>}
+                    <div style={{ width: active ? 16 : 12, height: active ? 16 : 12, borderRadius:'50%', background:ps.dot, margin:'0 auto', border:`2px solid ${active ? 'var(--color-ink-900)' : 'var(--bg-base)'}`, boxShadow:'var(--shadow-sm)', transition:'all 0.15s ease', transform: active ? 'scale(1.25)' : 'scale(1)' }} />
+                    {!above && <>
+                      <div style={{ fontFamily:'var(--font-sans)', fontSize:10, fontWeight:600, color: active ? 'var(--accent-primary)' : 'var(--text-secondary)', whiteSpace:'nowrap', marginTop:5 }}>{phil.name}</div>
+                      <div style={{ fontFamily:'var(--font-sans)', fontSize:9, color:'var(--text-tertiary)', whiteSpace:'nowrap' }}>{phil.years}</div>
+                    </>}
+                  </div>
+                );
+              })}
+            </div>
+            {sel && (
+              <div style={{ marginTop:20, background:'var(--bg-card)', border:'1px solid var(--border-default)', borderRadius:10, padding:'16px 22px', maxWidth:380, boxShadow:'var(--shadow-sm)', display:'flex', alignItems:'center', gap:14 }}>
+                <div style={{ width:44, height:44, borderRadius:'50%', background:'var(--color-terracotta-100)', border:'1.5px solid var(--color-terracotta-200)', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'var(--font-serif)', fontWeight:700, fontSize:17, color:'var(--accent-primary)', flexShrink:0 }}>{sel.name[0]}</div>
+                <div>
+                  <h3 style={{ fontFamily:'var(--font-serif)', fontSize:20, fontWeight:700, color:'var(--text-primary)', margin:'0 0 4px' }}>{sel.name}</h3>
+                  <div style={{ fontFamily:'var(--font-sans)', fontSize:13, color:'var(--text-secondary)' }}>{sel.years} · {sel.period}</div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    };
+
+    /* ════════════════════════════════════ TEMAS VIEW */
+    const GLYPHS = ['◈','◉','◇','◆','○','●'];
+    const ThemeCard = ({ theme, glyph }) => {
+      const [hov, setHov] = React.useState(false);
+      return (
+        <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+          style={{ background:'var(--bg-card)', borderRadius:'var(--radius-card)', cursor:'pointer', padding:'22px 22px', transition:'all var(--transition-normal)',
+            border:`1px solid ${hov ? 'var(--border-strong)' : 'var(--border-default)'}`,
+            boxShadow: hov ? 'var(--shadow-md)' : 'var(--shadow-xs)',
+            transform: hov ? 'translateY(-2px)' : 'none' }}>
+          <div style={{ fontFamily:'var(--font-serif)', fontSize:28, color:'var(--accent-primary)', marginBottom:8 }}>{glyph}</div>
+          <h3 style={{ fontFamily:'var(--font-serif)', fontSize:20, fontWeight:700, color:'var(--text-primary)', margin:'0 0 4px' }}>{theme.name}</h3>
+          <div style={{ fontFamily:'var(--font-sans)', fontSize:12, color:'var(--text-tertiary)', marginBottom:8 }}>{theme.count} recursos</div>
+          <div style={{ fontFamily:'var(--font-sans)', fontSize:11, color:'var(--text-secondary)' }}>{theme.authors}</div>
+        </div>
+      );
+    };
+    const TemasView = () => (
+      <div style={{ flex:1, display:'flex', flexDirection:'column', minWidth:0 }}>
+        <div style={{ padding:'14px 24px', borderBottom:'1px solid var(--border-subtle)', background:'var(--bg-card)', flexShrink:0 }}>
+          <h1 style={{ fontFamily:'var(--font-serif)', fontSize:22, fontWeight:700, color:'var(--text-primary)', margin:0 }}>Temas filosóficos</h1>
+        </div>
+        <div style={{ flex:1, overflowY:'auto', padding:24 }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(210px,1fr))', gap:16 }}>
+            {THEMES.map((t, i) => <ThemeCard key={t.id} theme={t} glyph={GLYPHS[i]} />)}
+          </div>
+        </div>
+      </div>
+    );
+
+    /* ════════════════════════════════════ TAREAS VIEW */
+    const TareasView = () => (
+      <div style={{ flex:1, display:'flex', flexDirection:'column', minWidth:0 }}>
+        <div style={{ padding:'14px 24px', borderBottom:'1px solid var(--border-subtle)', background:'var(--bg-card)', display:'flex', justifyContent:'space-between', alignItems:'center', flexShrink:0 }}>
+          <h1 style={{ fontFamily:'var(--font-serif)', fontSize:22, fontWeight:700, color:'var(--text-primary)', margin:0 }}>Tareas</h1>
+          <button style={{ display:'flex', alignItems:'center', gap:6, height:36, padding:'0 14px', background:'var(--accent-primary)', color:'#fff', border:'none', borderRadius:6, fontFamily:'var(--font-sans)', fontWeight:600, fontSize:13, cursor:'pointer' }}>
+            <Icon name="plus" size={14} color="#fff" /> Nueva tarea
+          </button>
+        </div>
+        <div style={{ flex:1, overflowY:'auto', padding:24 }}>
+          <div style={{ display:'flex', flexDirection:'column', gap:10, maxWidth:680 }}>
+            {TASKS.map(task => {
+              const done = task.status === 'submitted';
+              return (
+                <div key={task.id} style={{ background:'var(--bg-card)', border:'1px solid var(--border-default)', borderRadius:'var(--radius-card)', padding:'16px 20px', display:'flex', gap:14, alignItems:'flex-start', boxShadow:'var(--shadow-xs)' }}>
+                  <div style={{ width:20, height:20, borderRadius:'50%', border:`2px solid ${done ? '#2d6a4f' : 'var(--border-strong)'}`, background: done ? '#2d6a4f' : 'transparent', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginTop:1 }}>
+                    {done && <span style={{ color:'#fff', fontSize:11, fontWeight:700, lineHeight:1 }}>✓</span>}
+                  </div>
+                  <div style={{ flex:1 }}>
+                    <div style={{ fontFamily:'var(--font-sans)', fontSize:14, fontWeight:600, color: done ? 'var(--text-tertiary)' : 'var(--text-primary)', textDecoration: done ? 'line-through' : 'none', marginBottom:4 }}>{task.title}</div>
+                    <div style={{ fontFamily:'var(--font-sans)', fontSize:12, color:'var(--text-tertiary)' }}>{task.resource} · Entrega: {task.due}</div>
+                  </div>
+                  <Chip flexShrink={0} bg={done ? 'var(--color-olive-50)' : 'var(--accent-tertiary-subtle)'} color={done ? 'var(--color-olive-700)' : 'var(--accent-tertiary-hover)'} border={done ? 'var(--color-olive-200)' : 'var(--color-gold-200)'}
+                    extra={{ flexShrink:0, fontSize:11 }}>
+                    {done ? 'Entregada' : 'Pendiente'}
+                  </Chip>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+
+    /* ════════════════════════════════════ APP */
+    const App = () => {
+      const [section, setSection] = React.useState('biblioteca');
+      const [search, setSearch] = React.useState('');
+      const [period, setPeriod] = React.useState('Todas');
+      const [selected, setSelected] = React.useState(null);
+
+      const filtered = RESOURCES.filter(r => {
+        const q = search.toLowerCase();
+        const ms = !q || r.title.toLowerCase().includes(q) || r.author.toLowerCase().includes(q) || r.themes.some(t => t.includes(q));
+        const mp = period === 'Todas' || r.period === period;
+        return ms && mp;
+      });
+
+      const navigate = s => { setSection(s); setSelected(null); };
+
+      return (
+        <div style={{ display:'flex', height:'100vh', background:'var(--bg-base)', overflow:'hidden' }}>
+          <Sidebar section={section} onNavigate={navigate} />
+          <div style={{ flex:1, display:'flex', overflow:'hidden', minWidth:0 }}>
+            {section === 'biblioteca' && <BibliotecaView resources={filtered} search={search} onSearch={setSearch} period={period} onPeriod={setPeriod} onResourceClick={setSelected} />}
+            {section === 'timeline'   && <TimelineView />}
+            {section === 'temas'      && <TemasView />}
+            {section === 'tareas'     && <TareasView />}
+          </div>
+          {selected && <ResourceDetail resource={selected} onClose={() => setSelected(null)} />}
+        </div>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

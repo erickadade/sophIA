@@ -19,16 +19,26 @@
   gap: var(--gap-xl);
 }
 .site-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-family: var(--font-serif);
-  font-size: var(--text-2xl);
+  font-size: 2rem;
   font-weight: var(--weight-bold);
+  line-height: 1;
   color: var(--text-primary);
   text-decoration: none;
   letter-spacing: var(--tracking-tight);
   flex-shrink: 0;
 }
 .site-logo__ia {
-  color: var(--terra);
+  color: var(--accent-primary);
+}
+.site-logo__owl {
+  width: 30px;
+  height: 45px;
+  display: block;
+  flex-shrink: 0;
 }
 .site-nav {
   display: flex;
@@ -388,7 +398,7 @@
   font-weight: var(--weight-bold);
   margin-bottom: var(--space-2);
 }
-.login-logo span { color: var(--terra); }
+.login-logo span { color: var(--accent-primary); }
 .login-title {
   text-align: center;
   font-size: var(--text-xl);

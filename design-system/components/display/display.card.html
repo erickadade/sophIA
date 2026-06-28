@@ -1,0 +1,63 @@
+<!-- @dsCard group="Components" viewport="700x200" name="Card" subtitle="Default, elevated, flat, and interactive card variants" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../../styles.css">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="../../_ds_bundle.js"></script>
+  <style>
+    body { background: var(--color-ink-50); padding: 20px 24px; margin: 0; }
+    .lbl { font-family: var(--font-sans); font-size: 10px; font-weight: 700;
+           letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-tertiary);
+           margin-bottom: 6px; }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .card-inner p { font-family: var(--font-sans); font-size: 12px; color: var(--text-secondary); margin: 4px 0 0; }
+    .card-inner h4 { font-family: var(--font-serif); font-size: 15px; font-weight: 600;
+                     color: var(--text-primary); margin: 0; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { Card } = window.SophIADesignSystem_67e1f4;
+
+    function Demo() {
+      return (
+        <div>
+          <div className="grid">
+            <div>
+              <div className="lbl">Default</div>
+              <Card padding="md">
+                <div className="card-inner"><h4>Platón</h4><p>428–348 a.C.</p></div>
+              </Card>
+            </div>
+            <div>
+              <div className="lbl">Elevated</div>
+              <Card variant="elevated" padding="md">
+                <div className="card-inner"><h4>Aristóteles</h4><p>384–322 a.C.</p></div>
+              </Card>
+            </div>
+            <div>
+              <div className="lbl">Flat</div>
+              <Card variant="flat" padding="md">
+                <div className="card-inner"><h4>Kant</h4><p>1724–1804</p></div>
+              </Card>
+            </div>
+            <div>
+              <div className="lbl">Interactive ↗</div>
+              <Card variant="interactive" padding="md" onClick={() => {}}>
+                <div className="card-inner"><h4>Arendt</h4><p>1906–1975</p></div>
+              </Card>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+  </script>
+</body>
+</html>

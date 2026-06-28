@@ -1,0 +1,47 @@
+<!-- @dsCard group="Type" viewport="700x220" name="Type Pairing" subtitle="Fraunces heading + Source Sans 3 body — the core editorial pattern" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { background: var(--bg-base); padding: 28px 32px; }
+    .example {
+      background: var(--bg-card); border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg); padding: 24px 28px;
+      box-shadow: var(--shadow-xs); max-width: 560px; margin-bottom: 16px;
+    }
+    .eyebrow {
+      font-family: var(--font-sans); font-size: 11px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--accent-secondary); margin-bottom: 8px;
+    }
+    .heading { font-family: var(--font-serif); font-size: 26px; font-weight: 700;
+               color: var(--text-primary); line-height: 1.3; margin-bottom: 10px; }
+    .body-text { font-family: var(--font-sans); font-size: 15px; color: var(--text-secondary);
+                 line-height: 1.6; }
+    .author { font-family: var(--font-sans); font-size: 12px; color: var(--text-tertiary);
+              margin-top: 12px; }
+    .tags { display: flex; gap: 6px; margin-top: 12px; }
+    .tag {
+      font-family: var(--font-sans); font-size: 11px; font-weight: 600;
+      padding: 3px 8px; border-radius: 4px;
+      background: var(--accent-secondary-subtle); color: var(--accent-secondary);
+      border: 1px solid var(--color-olive-200);
+    }
+  </style>
+</head>
+<body>
+  <div class="example">
+    <div class="eyebrow">Filosofía antigua</div>
+    <div class="heading">Alegoría de la caverna</div>
+    <div class="body-text">Prisioneros encadenados que solo ven sombras en una pared — la metáfora que Platón usa para distinguir apariencia de realidad, ignorancia de conocimiento verdadero.</div>
+    <div class="author">Platón · República, Libro VII · 380 a.C.</div>
+    <div class="tags">
+      <span class="tag">conocimiento</span>
+      <span class="tag">realidad</span>
+      <span class="tag">verdad</span>
+    </div>
+  </div>
+</body>
+</html>

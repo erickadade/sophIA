@@ -1,0 +1,11 @@
+/* sophIA Design System — Web fonts
+   Served from Google Fonts CDN.
+   ⚠ Substitution notice: font files are not bundled locally.
+   To bundle for offline use, download the WOFF2 files from Google Fonts
+   and replace this @import with proper @font-face declarations.
+
+   Fraunces: variable optical-size serif (display / headings)
+   Source Sans 3: variable sans-serif (body / UI)
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
