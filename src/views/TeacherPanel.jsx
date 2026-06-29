@@ -146,6 +146,7 @@ export default function TeacherPanel() {
                       <td>{autorNombre}</td>
                       <td>{r.temas?.join(', ')}</td>
                       <td className="table-actions">
+                        <a className="btn btn-secondary btn-sm" href={`/recurso/${r.id}`} target="_blank" rel="noreferrer">Visualizar</a>
                         <button className="btn btn-secondary btn-sm" onClick={() => openModal('recurso', r)}>Editar</button>
                         <button className="btn btn-danger btn-sm" onClick={() => handleDelete('recursos', r.id)}>Borrar</button>
                       </td>
