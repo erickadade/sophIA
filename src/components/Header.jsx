@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { signOut } from 'firebase/auth'
 import { auth } from '../lib/firebase'
@@ -9,10 +9,24 @@ export default function Header() {
   const navigate = useNavigate()
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const userMenuRef = useRef(null)
 
   useEffect(() => {
     setMenuOpen(false)
+    setUserMenuOpen(false)
   }, [location.pathname])
+
+  useEffect(() => {
+    if (!userMenuOpen) return
+    const handleClickOutside = (e) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
+        setUserMenuOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [userMenuOpen])
 
   const handleLogout = async () => {
     await signOut(auth)
@@ -63,11 +77,29 @@ export default function Header() {
 
         <div className="site-header__auth">
           {user ? (
-            <div className="header-user">
-              <span className="header-user__name">{userData?.nombre || user.email}</span>
-              <button className="btn btn-ghost btn-sm" onClick={handleLogout}>
-                Salir
+            <div className="user-menu" ref={userMenuRef}>
+              <button
+                className="user-avatar-btn"
+                aria-label="Menú de usuario"
+                aria-expanded={userMenuOpen}
+                onClick={() => setUserMenuOpen(o => !o)}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true">
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 20c0-3.866 3.582-7 8-7s8 3.134 8 7" />
+                </svg>
               </button>
+              {userMenuOpen && (
+                <div className="user-dropdown" role="menu">
+                  <div className="user-dropdown__name">{userData?.nombre || user.email}</div>
+                  <button className="user-dropdown__item" role="menuitem" onClick={() => setUserMenuOpen(false)}>
+                    Gestionar cuenta
+                  </button>
+                  <button className="user-dropdown__item user-dropdown__item--danger" role="menuitem" onClick={handleLogout}>
+                    Cerrar sesión
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <Link to="/login" className="btn btn-primary btn-sm">

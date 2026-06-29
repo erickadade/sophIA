@@ -58,8 +58,74 @@
 .nav-link:hover { color: var(--text-primary); background: var(--bg-subtle); }
 .nav-link--active { color: var(--accent-primary); font-weight: var(--weight-semibold); }
 .site-header__auth { margin-left: auto; flex-shrink: 0; }
-.header-user { display: flex; align-items: center; gap: var(--gap-md); }
-.header-user__name { font-size: var(--text-sm); color: var(--text-secondary); }
+.user-menu { position: relative; }
+
+.user-avatar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--border-default);
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+.user-avatar-btn:hover {
+  background: var(--accent-primary-muted);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+.user-avatar-btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+@keyframes dropdown-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 200px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: var(--z-sticky);
+  overflow: hidden;
+  animation: dropdown-in var(--transition-normal) both;
+}
+
+.user-dropdown__name {
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-subtle);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-dropdown__item {
+  display: block;
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: none;
+  border: none;
+  text-align: left;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.user-dropdown__item:hover { background: var(--bg-subtle); color: var(--text-primary); }
+.user-dropdown__item--danger { color: var(--accent-primary); }
+.user-dropdown__item--danger:hover { background: var(--accent-primary-muted); color: var(--accent-primary-hover); }
 
 .nav-toggle {
   display: none;
