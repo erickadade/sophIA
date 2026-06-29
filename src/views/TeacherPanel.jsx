@@ -13,7 +13,7 @@ const TIPOS_RECURSO = ['texto', 'pdf', 'video', 'tiktok', 'instagram', 'facebook
 const CURSOS = ['1A', '1B', '2A', '2B', '3A', '3B', '4A', '4B', '5A', '5B']
 
 export default function TeacherPanel() {
-  const [tab, setTab] = useState('Autores')
+  const [tab, setTab] = useState('Recursos')
   const [autores, setAutores] = useState([])
   const [recursos, setRecursos] = useState([])
   const [consignas, setConsignas] = useState([])
