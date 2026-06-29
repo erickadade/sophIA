@@ -605,6 +605,9 @@
 }
 .panel-table tr:last-child td { border-bottom: none; }
 .panel-table tr:hover td { background: var(--bg-subtle); }
+.panel-table th.sortable { cursor: pointer; user-select: none; }
+.panel-table th.sortable:hover { color: var(--text-primary); }
+.sort-arrow { margin-left: var(--space-1); }
 .table-actions { display: flex; gap: var(--gap-sm); white-space: nowrap; }
 .seed-section { padding: var(--space-4) 0; display: flex; align-items: center; gap: var(--gap-md); }
 .seed-msg { font-size: var(--text-sm); color: var(--text-secondary); }

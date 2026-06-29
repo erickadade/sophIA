@@ -24,6 +24,7 @@ export default function TeacherPanel() {
   const [seedMsg, setSeedMsg] = useState('')
   const [seeding, setSeeding] = useState(false)
   const [entregaDetalle, setEntregaDetalle] = useState(null)
+  const [sortRecursos, setSortRecursos] = useState({ col: null, dir: 'asc' })
 
   async function cargar() {
     try {
@@ -67,7 +68,22 @@ export default function TeacherPanel() {
     await cargar()
   }
 
+  function toggleSortRecursos(col) {
+    setSortRecursos(s => s.col === col ? { col, dir: s.dir === 'asc' ? 'desc' : 'asc' } : { col, dir: 'asc' })
+  }
+
   if (loading) return <div className="loading-state">Cargando...</div>
+
+  const recursosConAutor = recursos.map(r => ({
+    ...r,
+    autorNombre: r.autorIds?.map(id => autores.find(a => a.id === id)?.nombre || id).join(', ') || '—',
+  }))
+  const recursosOrdenados = sortRecursos.col
+    ? [...recursosConAutor].sort((a, b) => {
+        const cmp = (a[sortRecursos.col] || '').localeCompare(b[sortRecursos.col] || '')
+        return sortRecursos.dir === 'asc' ? cmp : -cmp
+      })
+    : recursosConAutor
 
   return (
     <div className="page-content">
@@ -135,24 +151,35 @@ export default function TeacherPanel() {
           </div>
           <div className="panel-table-wrapper">
             <table className="panel-table">
-              <thead><tr><th>Título</th><th>Tipo</th><th>Autor</th><th>Temas</th><th></th></tr></thead>
+              <thead>
+                <tr>
+                  <th className="sortable" onClick={() => toggleSortRecursos('titulo')}>
+                    Título{sortRecursos.col === 'titulo' && <span className="sort-arrow">{sortRecursos.dir === 'asc' ? '▲' : '▼'}</span>}
+                  </th>
+                  <th className="sortable" onClick={() => toggleSortRecursos('tipo')}>
+                    Tipo{sortRecursos.col === 'tipo' && <span className="sort-arrow">{sortRecursos.dir === 'asc' ? '▲' : '▼'}</span>}
+                  </th>
+                  <th className="sortable" onClick={() => toggleSortRecursos('autorNombre')}>
+                    Autor{sortRecursos.col === 'autorNombre' && <span className="sort-arrow">{sortRecursos.dir === 'asc' ? '▲' : '▼'}</span>}
+                  </th>
+                  <th>Temas</th>
+                  <th></th>
+                </tr>
+              </thead>
               <tbody>
-                {recursos.map(r => {
-                  const autorNombre = r.autorIds?.map(id => autores.find(a => a.id === id)?.nombre || id).join(', ') || '—'
-                  return (
-                    <tr key={r.id}>
-                      <td>{r.titulo}</td>
-                      <td><span className={`resource-type-badge tipo-${r.tipo}`}>{r.tipo}</span></td>
-                      <td>{autorNombre}</td>
-                      <td>{r.temas?.join(', ')}</td>
-                      <td className="table-actions">
-                        <a className="btn btn-secondary btn-sm" href={`/recurso/${r.id}`} target="_blank" rel="noreferrer">Visualizar</a>
-                        <button className="btn btn-secondary btn-sm" onClick={() => openModal('recurso', r)}>Editar</button>
-                        <button className="btn btn-danger btn-sm" onClick={() => handleDelete('recursos', r.id)}>Borrar</button>
-                      </td>
-                    </tr>
-                  )
-                })}
+                {recursosOrdenados.map(r => (
+                  <tr key={r.id}>
+                    <td>{r.titulo}</td>
+                    <td><span className={`resource-type-badge tipo-${r.tipo}`}>{r.tipo}</span></td>
+                    <td>{r.autorNombre}</td>
+                    <td>{r.temas?.join(', ')}</td>
+                    <td className="table-actions">
+                      <a className="btn btn-secondary btn-sm" href={`/recurso/${r.id}`} target="_blank" rel="noreferrer">Visualizar</a>
+                      <button className="btn btn-secondary btn-sm" onClick={() => openModal('recurso', r)}>Editar</button>
+                      <button className="btn btn-danger btn-sm" onClick={() => handleDelete('recursos', r.id)}>Borrar</button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
