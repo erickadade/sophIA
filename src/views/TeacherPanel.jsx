@@ -138,7 +138,7 @@ export default function TeacherPanel() {
               <thead><tr><th>Título</th><th>Tipo</th><th>Autor</th><th>Temas</th><th></th></tr></thead>
               <tbody>
                 {recursos.map(r => {
-                  const autorNombre = autores.find(a => a.id === r.autorId)?.nombre || r.autorId
+                  const autorNombre = r.autorIds?.map(id => autores.find(a => a.id === id)?.nombre || id).join(', ') || '—'
                   return (
                     <tr key={r.id}>
                       <td>{r.titulo}</td>
@@ -370,7 +370,7 @@ function RecursoModal({ item, autores, recursos, onClose, onSaved }) {
   const [form, setForm] = useState({
     tipo: item?.tipo || 'texto',
     titulo: item?.titulo || '',
-    autorId: item?.autorId || autores[0]?.id || '',
+    autorIds: item?.autorIds || (autores[0] ? [autores[0].id] : []),
     temas: item?.temas?.join(', ') || '',
     contenidoTexto: item?.contenidoTexto || '',
     urlArchivo: item?.urlArchivo || '',
@@ -378,8 +378,16 @@ function RecursoModal({ item, autores, recursos, onClose, onSaved }) {
     relacionados: item?.relacionados || [],
   })
   const [saving, setSaving] = useState(false)
+  const [buscarRelacionado, setBuscarRelacionado] = useState('')
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
+
+  const addAutor = (id) => {
+    if (!id || form.autorIds.includes(id)) return
+    set('autorIds', [...form.autorIds, id])
+  }
+
+  const removeAutor = (id) => set('autorIds', form.autorIds.filter(a => a !== id))
 
   const toggleRelacionado = (rid) => {
     setForm(f => ({
@@ -392,6 +400,10 @@ function RecursoModal({ item, autores, recursos, onClose, onSaved }) {
 
   async function handleSubmit(e) {
     e.preventDefault()
+    if (form.autorIds.length === 0) {
+      alert('Seleccioná al menos un autor')
+      return
+    }
     setSaving(true)
     const data = {
       ...form,
@@ -412,6 +424,10 @@ function RecursoModal({ item, autores, recursos, onClose, onSaved }) {
   }
 
   const otrosRecursos = recursos.filter(r => r.id !== item?.id)
+  const autoresDisponibles = autores.filter(a => !form.autorIds.includes(a.id))
+  const relacionadosFiltrados = buscarRelacionado.trim()
+    ? otrosRecursos.filter(r => r.titulo.toLowerCase().includes(buscarRelacionado.toLowerCase().trim()))
+    : otrosRecursos
 
   return (
     <Modal title={item ? 'Editar recurso' : 'Nuevo recurso'} onClose={onClose} wide>
@@ -429,11 +445,29 @@ function RecursoModal({ item, autores, recursos, onClose, onSaved }) {
           </div>
         </div>
         <div className="form-row">
-          <div className="form-group">
-            <label>Autor</label>
-            <select className="form-control" value={form.autorId} onChange={e => set('autorId', e.target.value)}>
-              {autores.map(a => <option key={a.id} value={a.id}>{a.nombre}</option>)}
-            </select>
+          <div className="form-group" style={{ flex: 2 }}>
+            <label>Autores</label>
+            <div className="autor-multiselect">
+              {form.autorIds.length > 0 && (
+                <div className="autor-chips">
+                  {form.autorIds.map(id => {
+                    const a = autores.find(x => x.id === id)
+                    return a ? (
+                      <span key={id} className="autor-chip">
+                        {a.nombre}
+                        <button type="button" className="autor-chip__remove" onClick={() => removeAutor(id)}>×</button>
+                      </span>
+                    ) : null
+                  })}
+                </div>
+              )}
+              {autoresDisponibles.length > 0 && (
+                <select className="form-control" value="" onChange={e => addAutor(e.target.value)}>
+                  <option value="">+ Agregar autor...</option>
+                  {autoresDisponibles.map(a => <option key={a.id} value={a.id}>{a.nombre}</option>)}
+                </select>
+              )}
+            </div>
           </div>
           <div className="form-group" style={{ flex: 2 }}>
             <label>Temas (separados por coma)</label>
@@ -469,14 +503,24 @@ function RecursoModal({ item, autores, recursos, onClose, onSaved }) {
         {otrosRecursos.length > 0 && (
           <div className="form-group">
             <label>Recursos relacionados</label>
+            <input
+              type="search"
+              className="form-control relacionados-buscador"
+              placeholder="Buscar recurso..."
+              value={buscarRelacionado}
+              onChange={e => setBuscarRelacionado(e.target.value)}
+            />
             <div className="relacionados-list">
-              {otrosRecursos.map(r => (
+              {relacionadosFiltrados.length === 0 ? (
+                <p className="relacionados-sin-resultados">Sin resultados</p>
+              ) : relacionadosFiltrados.map(r => (
                 <label key={r.id} className="relacionado-item">
                   <input
                     type="checkbox"
                     checked={form.relacionados.includes(r.id)}
                     onChange={() => toggleRelacionado(r.id)}
                   />
+                  <span className={`resource-type-badge tipo-${r.tipo}`}>{r.tipo}</span>
                   <span>{r.titulo}</span>
                 </label>
               ))}

@@ -37,7 +37,7 @@ export default function Search() {
   const recursosFiltrados = q
     ? allRecursos.filter(r =>
         r.titulo.toLowerCase().includes(q) ||
-        autoresMap[r.autorId]?.toLowerCase().includes(q) ||
+        r.autorIds?.some(id => autoresMap[id]?.toLowerCase().includes(q)) ||
         r.temas?.some(t => t.toLowerCase().includes(q))
       )
     : []
@@ -85,7 +85,7 @@ export default function Search() {
               <h2 className="section-title">Recursos ({recursosFiltrados.length})</h2>
               <div className="resources-grid">
                 {recursosFiltrados.map(r => (
-                  <ResourceCard key={r.id} recurso={r} autorNombre={autoresMap[r.autorId]} />
+                  <ResourceCard key={r.id} recurso={r} autorNombres={r.autorIds?.map(id => autoresMap[id]).filter(Boolean)} />
                 ))}
               </div>
             </section>

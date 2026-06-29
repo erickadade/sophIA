@@ -10,7 +10,7 @@ export default function ResourceDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
   const [recurso, setRecurso] = useState(null)
-  const [autor, setAutor] = useState(null)
+  const [autores, setAutores] = useState([])
   const [relacionados, setRelacionados] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -21,10 +21,12 @@ export default function ResourceDetail() {
       const data = { id: snap.id, ...snap.data() }
       setRecurso(data)
 
-      const [autorSnap] = await Promise.all([
-        getDoc(doc(db, 'autores', data.autorId)),
-      ])
-      if (autorSnap.exists()) setAutor({ id: autorSnap.id, ...autorSnap.data() })
+      if (data.autorIds?.length > 0) {
+        const autorSnaps = await Promise.all(
+          data.autorIds.map(id => getDoc(doc(db, 'autores', id)))
+        )
+        setAutores(autorSnaps.filter(s => s.exists()).map(s => ({ id: s.id, ...s.data() })))
+      }
 
       if (data.relacionados?.length > 0) {
         const relSnaps = await Promise.all(
@@ -53,11 +55,11 @@ export default function ResourceDetail() {
             <span className={`resource-type-badge tipo-${recurso.tipo}`}>
               {recurso.tipo}
             </span>
-            {autor && (
-              <Link to={`/autor/${autor.id}`} className="resource-detail__autor-link">
+            {autores.map(autor => (
+              <Link key={autor.id} to={`/autor/${autor.id}`} className="resource-detail__autor-link">
                 {autor.nombre}
               </Link>
-            )}
+            ))}
           </div>
           <h1 className="resource-detail__title">{recurso.titulo}</h1>
           {recurso.temas?.length > 0 && (
