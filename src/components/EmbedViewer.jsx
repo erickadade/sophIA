@@ -28,6 +28,13 @@ function getFacebookEmbedUrl(url) {
   return `${base}?href=${encodeURIComponent(url)}&show_text=false`
 }
 
+function getDrivePreviewUrl(url) {
+  if (!url) return null
+  const match = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/)
+  if (!match) return null
+  return `https://drive.google.com/file/d/${match[1]}/preview`
+}
+
 export default function EmbedViewer({ tipo, urlEmbed, urlArchivo, contenidoTexto }) {
   if (tipo === 'video' || tipo === 'tiktok' || tipo === 'instagram' || tipo === 'facebook') {
     let embedUrl = null
@@ -81,6 +88,29 @@ export default function EmbedViewer({ tipo, urlEmbed, urlArchivo, contenidoTexto
 
   if (tipo === 'pdf' || tipo === 'imagen') {
     const esPdf = tipo === 'pdf'
+    const previewUrl = getDrivePreviewUrl(urlArchivo)
+
+    if (previewUrl) {
+      return (
+        <div>
+          <div className="embed-wrapper embed-wrapper--documento">
+            <iframe
+              src={previewUrl}
+              title={esPdf ? 'Vista previa del PDF' : 'Vista previa de la imagen'}
+              frameBorder="0"
+              allow="autoplay"
+              allowFullScreen
+            />
+          </div>
+          <div style={{ textAlign: 'center', marginTop: 'var(--space-3)' }}>
+            <a href={urlArchivo} target="_blank" rel="noopener noreferrer" className="btn btn-ghost btn-sm">
+              Abrir en pestaña nueva
+            </a>
+          </div>
+        </div>
+      )
+    }
+
     return (
       <div className="pdf-link-box">
         <div className="pdf-icon">{esPdf ? '📄' : '🖼️'}</div>
