@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './hooks/useAuth'
 import Header from './components/Header'
+import Footer from './components/Footer'
 import ProtectedRoute from './components/ProtectedRoute'
 import Timeline from './views/Timeline'
 import AuthorProfile from './views/AuthorProfile'
@@ -43,6 +44,7 @@ export default function App() {
             />
           </Routes>
         </main>
+        <Footer />
       </AuthProvider>
     </BrowserRouter>
   )
