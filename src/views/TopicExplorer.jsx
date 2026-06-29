@@ -98,7 +98,7 @@ export default function TopicExplorer() {
                 <ResourceCard
                   key={r.id}
                   recurso={r}
-                  autorNombre={autoresMap[r.autorId]}
+                  autorNombres={r.autorIds?.map(id => autoresMap[id]).filter(Boolean)}
                 />
               ))}
             </div>

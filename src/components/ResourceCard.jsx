@@ -21,7 +21,7 @@ const TYPE_LABELS = {
   imagen: 'Imagen',
 }
 
-export default function ResourceCard({ recurso, autorNombre }) {
+export default function ResourceCard({ recurso, autorNombres }) {
   const navigate = useNavigate()
 
   return (
@@ -38,8 +38,12 @@ export default function ResourceCard({ recurso, autorNombre }) {
         </span>
       </div>
       <h3 className="resource-card__title">{recurso.titulo}</h3>
-      {autorNombre && (
-        <p className="resource-card__autor">{autorNombre}</p>
+      {autorNombres?.length > 0 && (
+        <div className="resource-card__autores">
+          {autorNombres.map((nombre, i) => (
+            <span key={i} className="resource-card__autor-chip">{nombre}</span>
+          ))}
+        </div>
       )}
       {recurso.temas?.length > 0 && (
         <div className="resource-card__tags">

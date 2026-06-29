@@ -22,7 +22,7 @@ export default function AuthorProfile() {
     async function load() {
       const [autorSnap, recursosSnap] = await Promise.all([
         getDoc(doc(db, 'autores', id)),
-        getDocs(query(collection(db, 'recursos'), where('autorId', '==', id))),
+        getDocs(query(collection(db, 'recursos'), where('autorIds', 'array-contains', id))),
       ])
       if (!autorSnap.exists()) { navigate('/'); return }
       setAutor({ id: autorSnap.id, ...autorSnap.data() })
