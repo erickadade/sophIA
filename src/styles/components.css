@@ -327,6 +327,9 @@
 .embed-wrapper--facebook {
   max-width: 500px;
 }
+.embed-wrapper--documento {
+  padding-bottom: 133%; /* 3:4 portrait para documentos */
+}
 .pdf-link-box {
   display: flex;
   flex-direction: column;
