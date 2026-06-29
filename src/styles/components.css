@@ -593,6 +593,8 @@
 }
 
 /* ── Relacionados ───────────────────────────────────────────── */
+.relacionados-buscador { margin-bottom: var(--space-2); font-size: var(--text-sm); }
+.relacionados-sin-resultados { font-size: var(--text-sm); color: var(--text-tertiary); padding: var(--space-3) var(--space-2); margin: 0; }
 .relacionados-list {
   max-height: 160px;
   overflow-y: auto;

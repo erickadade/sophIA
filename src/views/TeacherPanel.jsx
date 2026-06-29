@@ -378,6 +378,7 @@ function RecursoModal({ item, autores, recursos, onClose, onSaved }) {
     relacionados: item?.relacionados || [],
   })
   const [saving, setSaving] = useState(false)
+  const [buscarRelacionado, setBuscarRelacionado] = useState('')
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
 
@@ -424,6 +425,9 @@ function RecursoModal({ item, autores, recursos, onClose, onSaved }) {
 
   const otrosRecursos = recursos.filter(r => r.id !== item?.id)
   const autoresDisponibles = autores.filter(a => !form.autorIds.includes(a.id))
+  const relacionadosFiltrados = buscarRelacionado.trim()
+    ? otrosRecursos.filter(r => r.titulo.toLowerCase().includes(buscarRelacionado.toLowerCase().trim()))
+    : otrosRecursos
 
   return (
     <Modal title={item ? 'Editar recurso' : 'Nuevo recurso'} onClose={onClose} wide>
@@ -499,14 +503,24 @@ function RecursoModal({ item, autores, recursos, onClose, onSaved }) {
         {otrosRecursos.length > 0 && (
           <div className="form-group">
             <label>Recursos relacionados</label>
+            <input
+              type="search"
+              className="form-control relacionados-buscador"
+              placeholder="Buscar recurso..."
+              value={buscarRelacionado}
+              onChange={e => setBuscarRelacionado(e.target.value)}
+            />
             <div className="relacionados-list">
-              {otrosRecursos.map(r => (
+              {relacionadosFiltrados.length === 0 ? (
+                <p className="relacionados-sin-resultados">Sin resultados</p>
+              ) : relacionadosFiltrados.map(r => (
                 <label key={r.id} className="relacionado-item">
                   <input
                     type="checkbox"
                     checked={form.relacionados.includes(r.id)}
                     onChange={() => toggleRelacionado(r.id)}
                   />
+                  <span className={`resource-type-badge tipo-${r.tipo}`}>{r.tipo}</span>
                   <span>{r.titulo}</span>
                 </label>
               ))}
