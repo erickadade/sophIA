@@ -539,6 +539,51 @@
 .form-row { display: flex; gap: var(--gap-lg); }
 .form-row .form-group { flex: 1; }
 
+/* ── Autor multi-select ──────────────────────────────────────── */
+.autor-multiselect {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.autor-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.autor-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-3);
+  background: var(--accent-secondary-subtle);
+  border: 1px solid var(--accent-secondary);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  color: var(--accent-secondary-hover);
+  font-weight: var(--weight-medium);
+}
+.autor-chip__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font-size: var(--text-base);
+  line-height: 1;
+  color: var(--accent-secondary-hover);
+  opacity: 0.7;
+}
+.autor-chip__remove:hover {
+  opacity: 1;
+  background: var(--accent-secondary);
+  color: var(--text-on-accent);
+}
+
 /* ── Relacionados ───────────────────────────────────────────── */
 .relacionados-list {
   max-height: 160px;
