@@ -447,21 +447,22 @@ function RecursoModal({ item, autores, recursos, onClose, onSaved }) {
             <textarea className="form-control" value={form.contenidoTexto} onChange={e => set('contenidoTexto', e.target.value)} rows={8} />
           </div>
         )}
-        {(form.tipo === 'pdf' || form.tipo === 'imagen') && (
+        {(form.tipo === 'pdf' || form.tipo === 'imagen' || form.tipo === 'video' || form.tipo === 'tiktok' || form.tipo === 'instagram' || form.tipo === 'facebook') && (
           <div className="form-group">
-            <label>URL del archivo (link externo — Google Drive, etc.)</label>
-            <input type="url" className="form-control" value={form.urlArchivo} onChange={e => set('urlArchivo', e.target.value)} placeholder="https://drive.google.com/..." />
-          </div>
-        )}
-        {(form.tipo === 'video' || form.tipo === 'tiktok' || form.tipo === 'instagram' || form.tipo === 'facebook') && (
-          <div className="form-group">
-            <label>URL de embed ({
-              form.tipo === 'video' ? 'ej: https://www.youtube.com/embed/...' :
-              form.tipo === 'tiktok' ? 'ej: https://www.tiktok.com/embed/v2/...' :
-              form.tipo === 'instagram' ? 'ej: https://www.instagram.com/reel/.../embed' :
-              'ej: código de embed de Facebook Video/Page Plugin'
-            })</label>
-            <input type="url" className="form-control" value={form.urlEmbed} onChange={e => set('urlEmbed', e.target.value)} />
+            <label>URL del contenido (pegá el link que copiás desde la app o el navegador)</label>
+            <input
+              type="url"
+              className="form-control"
+              value={form.urlArchivo}
+              onChange={e => set('urlArchivo', e.target.value)}
+              placeholder={
+                form.tipo === 'video' ? 'ej: https://youtube.com/watch?v=...' :
+                form.tipo === 'tiktok' ? 'ej: https://www.tiktok.com/@usuario/video/...' :
+                form.tipo === 'instagram' ? 'ej: https://www.instagram.com/reel/...' :
+                form.tipo === 'facebook' ? 'ej: https://www.facebook.com/...' :
+                'https://drive.google.com/...'
+              }
+            />
           </div>
         )}
 
