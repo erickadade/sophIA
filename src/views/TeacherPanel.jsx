@@ -80,7 +80,14 @@ export default function TeacherPanel() {
   }))
   const recursosOrdenados = sortRecursos.col
     ? [...recursosConAutor].sort((a, b) => {
-        const cmp = (a[sortRecursos.col] || '').localeCompare(b[sortRecursos.col] || '')
+        let cmp
+        if (sortRecursos.col === 'fechaActualizacion') {
+          const aMs = a.fechaActualizacion?.toMillis?.() ?? 0
+          const bMs = b.fechaActualizacion?.toMillis?.() ?? 0
+          cmp = aMs - bMs
+        } else {
+          cmp = (a[sortRecursos.col] || '').localeCompare(b[sortRecursos.col] || '')
+        }
         return sortRecursos.dir === 'asc' ? cmp : -cmp
       })
     : recursosConAutor
@@ -163,6 +170,9 @@ export default function TeacherPanel() {
                     Autor{sortRecursos.col === 'autorNombre' && <span className="sort-arrow">{sortRecursos.dir === 'asc' ? '▲' : '▼'}</span>}
                   </th>
                   <th>Temas</th>
+                  <th className="sortable" onClick={() => toggleSortRecursos('fechaActualizacion')}>
+                    Actualización{sortRecursos.col === 'fechaActualizacion' && <span className="sort-arrow">{sortRecursos.dir === 'asc' ? '▲' : '▼'}</span>}
+                  </th>
                   <th></th>
                 </tr>
               </thead>
@@ -173,6 +183,11 @@ export default function TeacherPanel() {
                     <td><span className={`resource-type-badge tipo-${r.tipo}`}>{r.tipo}</span></td>
                     <td>{r.autorNombre}</td>
                     <td>{r.temas?.join(', ')}</td>
+                    <td>
+                      <span title={r.fechaCreacion ? `Creado: ${r.fechaCreacion.toDate().toLocaleDateString('es-AR')}` : undefined}>
+                        {r.fechaActualizacion?.toDate?.().toLocaleDateString('es-AR') || '—'}
+                      </span>
+                    </td>
                     <td className="table-actions">
                       <a className="btn btn-secondary btn-sm" href={`/recurso/${r.id}`} target="_blank" rel="noreferrer">Visualizar</a>
                       <button className="btn btn-secondary btn-sm" onClick={() => openModal('recurso', r)}>Editar</button>
@@ -436,12 +451,13 @@ function RecursoModal({ item, autores, recursos, onClose, onSaved }) {
     const data = {
       ...form,
       temas: form.temas.split(',').map(t => t.trim().toLowerCase()).filter(Boolean),
+      fechaActualizacion: serverTimestamp(),
     }
     try {
       if (item?.id) {
         await updateDoc(doc(db, 'recursos', item.id), data)
       } else {
-        await addDoc(collection(db, 'recursos'), data)
+        await addDoc(collection(db, 'recursos'), { ...data, fechaCreacion: serverTimestamp() })
       }
       onSaved()
     } catch (err) {
