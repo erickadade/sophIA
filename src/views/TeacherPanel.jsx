@@ -25,6 +25,7 @@ export default function TeacherPanel() {
   const [seeding, setSeeding] = useState(false)
   const [entregaDetalle, setEntregaDetalle] = useState(null)
   const [sortRecursos, setSortRecursos] = useState({ col: null, dir: 'asc' })
+  const [busquedaRecursos, setBusquedaRecursos] = useState('')
 
   async function cargar() {
     try {
@@ -78,8 +79,19 @@ export default function TeacherPanel() {
     ...r,
     autorNombre: r.autorIds?.map(id => autores.find(a => a.id === id)?.nombre || id).join(', ') || '—',
   }))
+  const recursosFiltrados = busquedaRecursos.trim()
+    ? recursosConAutor.filter(r => {
+        const q = busquedaRecursos.toLowerCase().trim()
+        return (
+          r.titulo?.toLowerCase().includes(q) ||
+          r.tipo?.toLowerCase().includes(q) ||
+          r.autorNombre?.toLowerCase().includes(q) ||
+          r.temas?.some(t => t.toLowerCase().includes(q))
+        )
+      })
+    : recursosConAutor
   const recursosOrdenados = sortRecursos.col
-    ? [...recursosConAutor].sort((a, b) => {
+    ? [...recursosFiltrados].sort((a, b) => {
         let cmp
         if (sortRecursos.col === 'fechaActualizacion') {
           const aMs = a.fechaActualizacion?.toMillis?.() ?? 0
@@ -90,7 +102,7 @@ export default function TeacherPanel() {
         }
         return sortRecursos.dir === 'asc' ? cmp : -cmp
       })
-    : recursosConAutor
+    : recursosFiltrados
 
   return (
     <div className="page-content">
@@ -151,7 +163,14 @@ export default function TeacherPanel() {
       {tab === 'Recursos' && (
         <div className="panel-section">
           <div className="panel-section__toolbar">
-            <h2>Recursos ({recursos.length})</h2>
+            <h2>Recursos ({busquedaRecursos.trim() ? recursosFiltrados.length : recursos.length})</h2>
+            <input
+              type="search"
+              className="form-control panel-search"
+              placeholder="Buscar por título, tipo, autor o tema..."
+              value={busquedaRecursos}
+              onChange={e => setBusquedaRecursos(e.target.value)}
+            />
             <button className="btn btn-primary btn-sm" onClick={() => openModal('recurso')}>
               + Nuevo recurso
             </button>
@@ -177,7 +196,11 @@ export default function TeacherPanel() {
                 </tr>
               </thead>
               <tbody>
-                {recursosOrdenados.map(r => (
+                {recursosOrdenados.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="table-empty-msg">Sin resultados para "{busquedaRecursos}"</td>
+                  </tr>
+                ) : recursosOrdenados.map(r => (
                   <tr key={r.id}>
                     <td>{r.titulo}</td>
                     <td><span className={`resource-type-badge tipo-${r.tipo}`}>{r.tipo}</span></td>
