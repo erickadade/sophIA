@@ -55,5 +55,6 @@ issues/          # prompts y contexto inicial del proyecto
 ## Convenciones
 
 - Commits chicos y descriptivos por feature. Preguntar antes de hacer push si no es obvio.
+- Al terminar de implementar un issue, siempre sugerir el mensaje de commit al final de la respuesta.
 - Los campos `urlArchivo` y `urlEmbed` son siempre inputs de texto/URL, nunca selectores de archivo.
 - No agregar Firebase Storage, no crear lógica de upload, no dejar placeholders para subir archivos.

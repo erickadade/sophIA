@@ -13,7 +13,7 @@ const TIPOS_RECURSO = ['texto', 'pdf', 'video', 'tiktok', 'instagram', 'facebook
 const CURSOS = ['1A', '1B', '2A', '2B', '3A', '3B', '4A', '4B', '5A', '5B']
 
 export default function TeacherPanel() {
-  const [tab, setTab] = useState('Autores')
+  const [tab, setTab] = useState('Recursos')
   const [autores, setAutores] = useState([])
   const [recursos, setRecursos] = useState([])
   const [consignas, setConsignas] = useState([])
@@ -24,6 +24,8 @@ export default function TeacherPanel() {
   const [seedMsg, setSeedMsg] = useState('')
   const [seeding, setSeeding] = useState(false)
   const [entregaDetalle, setEntregaDetalle] = useState(null)
+  const [sortRecursos, setSortRecursos] = useState({ col: null, dir: 'asc' })
+  const [busquedaRecursos, setBusquedaRecursos] = useState('')
 
   async function cargar() {
     try {
@@ -67,7 +69,40 @@ export default function TeacherPanel() {
     await cargar()
   }
 
+  function toggleSortRecursos(col) {
+    setSortRecursos(s => s.col === col ? { col, dir: s.dir === 'asc' ? 'desc' : 'asc' } : { col, dir: 'asc' })
+  }
+
   if (loading) return <div className="loading-state">Cargando...</div>
+
+  const recursosConAutor = recursos.map(r => ({
+    ...r,
+    autorNombre: r.autorIds?.map(id => autores.find(a => a.id === id)?.nombre || id).join(', ') || '—',
+  }))
+  const recursosFiltrados = busquedaRecursos.trim()
+    ? recursosConAutor.filter(r => {
+        const q = busquedaRecursos.toLowerCase().trim()
+        return (
+          r.titulo?.toLowerCase().includes(q) ||
+          r.tipo?.toLowerCase().includes(q) ||
+          r.autorNombre?.toLowerCase().includes(q) ||
+          r.temas?.some(t => t.toLowerCase().includes(q))
+        )
+      })
+    : recursosConAutor
+  const recursosOrdenados = sortRecursos.col
+    ? [...recursosFiltrados].sort((a, b) => {
+        let cmp
+        if (sortRecursos.col === 'fechaActualizacion') {
+          const aMs = a.fechaActualizacion?.toMillis?.() ?? 0
+          const bMs = b.fechaActualizacion?.toMillis?.() ?? 0
+          cmp = aMs - bMs
+        } else {
+          cmp = (a[sortRecursos.col] || '').localeCompare(b[sortRecursos.col] || '')
+        }
+        return sortRecursos.dir === 'asc' ? cmp : -cmp
+      })
+    : recursosFiltrados
 
   return (
     <div className="page-content">
@@ -128,30 +163,61 @@ export default function TeacherPanel() {
       {tab === 'Recursos' && (
         <div className="panel-section">
           <div className="panel-section__toolbar">
-            <h2>Recursos ({recursos.length})</h2>
+            <h2>Recursos ({busquedaRecursos.trim() ? recursosFiltrados.length : recursos.length})</h2>
+            <input
+              type="search"
+              className="form-control panel-search"
+              placeholder="Buscar por título, tipo, autor o tema..."
+              value={busquedaRecursos}
+              onChange={e => setBusquedaRecursos(e.target.value)}
+            />
             <button className="btn btn-primary btn-sm" onClick={() => openModal('recurso')}>
               + Nuevo recurso
             </button>
           </div>
           <div className="panel-table-wrapper">
             <table className="panel-table">
-              <thead><tr><th>Título</th><th>Tipo</th><th>Autor</th><th>Temas</th><th></th></tr></thead>
+              <thead>
+                <tr>
+                  <th className="sortable" onClick={() => toggleSortRecursos('titulo')}>
+                    Título{sortRecursos.col === 'titulo' && <span className="sort-arrow">{sortRecursos.dir === 'asc' ? '▲' : '▼'}</span>}
+                  </th>
+                  <th className="sortable" onClick={() => toggleSortRecursos('tipo')}>
+                    Tipo{sortRecursos.col === 'tipo' && <span className="sort-arrow">{sortRecursos.dir === 'asc' ? '▲' : '▼'}</span>}
+                  </th>
+                  <th className="sortable" onClick={() => toggleSortRecursos('autorNombre')}>
+                    Autor{sortRecursos.col === 'autorNombre' && <span className="sort-arrow">{sortRecursos.dir === 'asc' ? '▲' : '▼'}</span>}
+                  </th>
+                  <th>Temas</th>
+                  <th className="sortable" onClick={() => toggleSortRecursos('fechaActualizacion')}>
+                    Actualización{sortRecursos.col === 'fechaActualizacion' && <span className="sort-arrow">{sortRecursos.dir === 'asc' ? '▲' : '▼'}</span>}
+                  </th>
+                  <th></th>
+                </tr>
+              </thead>
               <tbody>
-                {recursos.map(r => {
-                  const autorNombre = r.autorIds?.map(id => autores.find(a => a.id === id)?.nombre || id).join(', ') || '—'
-                  return (
-                    <tr key={r.id}>
-                      <td>{r.titulo}</td>
-                      <td><span className={`resource-type-badge tipo-${r.tipo}`}>{r.tipo}</span></td>
-                      <td>{autorNombre}</td>
-                      <td>{r.temas?.join(', ')}</td>
-                      <td className="table-actions">
-                        <button className="btn btn-secondary btn-sm" onClick={() => openModal('recurso', r)}>Editar</button>
-                        <button className="btn btn-danger btn-sm" onClick={() => handleDelete('recursos', r.id)}>Borrar</button>
-                      </td>
-                    </tr>
-                  )
-                })}
+                {recursosOrdenados.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="table-empty-msg">Sin resultados para "{busquedaRecursos}"</td>
+                  </tr>
+                ) : recursosOrdenados.map(r => (
+                  <tr key={r.id}>
+                    <td>{r.titulo}</td>
+                    <td><span className={`resource-type-badge tipo-${r.tipo}`}>{r.tipo}</span></td>
+                    <td>{r.autorNombre}</td>
+                    <td>{r.temas?.join(', ')}</td>
+                    <td>
+                      <span title={r.fechaCreacion ? `Creado: ${r.fechaCreacion.toDate().toLocaleDateString('es-AR')}` : undefined}>
+                        {r.fechaActualizacion?.toDate?.().toLocaleDateString('es-AR') || '—'}
+                      </span>
+                    </td>
+                    <td className="table-actions">
+                      <a className="btn btn-secondary btn-sm" href={`/recurso/${r.id}`} target="_blank" rel="noreferrer">Visualizar</a>
+                      <button className="btn btn-secondary btn-sm" onClick={() => openModal('recurso', r)}>Editar</button>
+                      <button className="btn btn-danger btn-sm" onClick={() => handleDelete('recursos', r.id)}>Borrar</button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -408,12 +474,13 @@ function RecursoModal({ item, autores, recursos, onClose, onSaved }) {
     const data = {
       ...form,
       temas: form.temas.split(',').map(t => t.trim().toLowerCase()).filter(Boolean),
+      fechaActualizacion: serverTimestamp(),
     }
     try {
       if (item?.id) {
         await updateDoc(doc(db, 'recursos', item.id), data)
       } else {
-        await addDoc(collection(db, 'recursos'), data)
+        await addDoc(collection(db, 'recursos'), { ...data, fechaCreacion: serverTimestamp() })
       }
       onSaved()
     } catch (err) {
