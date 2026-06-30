@@ -436,7 +436,7 @@ function RecursoModal({ item, autores, recursos, onClose, onSaved }) {
   const [form, setForm] = useState({
     tipo: item?.tipo || 'texto',
     titulo: item?.titulo || '',
-    autorIds: item?.autorIds || (autores[0] ? [autores[0].id] : []),
+    autorIds: item?.autorIds || [],
     temas: item?.temas?.join(', ') || '',
     contenidoTexto: item?.contenidoTexto || '',
     urlArchivo: item?.urlArchivo || '',
