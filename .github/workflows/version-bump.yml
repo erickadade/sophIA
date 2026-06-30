@@ -1,0 +1,71 @@
+name: Version Bump
+
+# Se dispara en cada push a main, ANTES del deploy a producción.
+# Usa Conventional Commits para decidir el tipo de bump:
+#   fix:              -> patch (0.0.X)
+#   feat:             -> minor (0.X.0)
+#   BREAKING CHANGE / feat!: / fix!:  -> major (X.0.0)
+# Commits que no siguen el formato se ignoran para el cálculo de versión.
+
+on:
+  push:
+    branches:
+      - main
+
+# Evita loops infinitos: si el propio bump hace push, no debe disparar este workflow de nuevo.
+# Lo logramos chequeando que el último commit no sea el de bump (ver step "Check if last commit is a release commit").
+
+permissions:
+  contents: write
+
+jobs:
+  version-bump:
+    runs-on: ubuntu-latest
+    # No correr si el commit que disparó el push ya es un commit de release
+    if: "!contains(github.event.head_commit.message, 'chore(release):')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # necesario para que standard-version vea todo el historial de tags/commits
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configurar Git
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar standard-version
+        run: npm install --no-save standard-version
+
+      - name: Verificar si hay commits que ameriten bump
+        id: check_commits
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -z "$LAST_TAG" ]; then
+            echo "No hay tags previos, se generará el primero."
+            echo "has_relevant_commits=true" >> "$GITHUB_OUTPUT"
+          else
+            # Busca commits feat/fix/BREAKING CHANGE desde el último tag
+            RELEVANT=$(git log "$LAST_TAG"..HEAD --pretty=format:"%s %b" | grep -E "^(feat|fix)(\(.+\))?!?:|BREAKING CHANGE" || true)
+            if [ -n "$RELEVANT" ]; then
+              echo "has_relevant_commits=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "has_relevant_commits=false" >> "$GITHUB_OUTPUT"
+              echo "No hay commits feat/fix/BREAKING CHANGE desde $LAST_TAG. Se omite el bump."
+            fi
+          fi
+
+      - name: Bump de versión con standard-version
+        if: steps.check_commits.outputs.has_relevant_commits == 'true'
+        run: npx standard-version
+
+      - name: Push de commit y tag a main
+        if: steps.check_commits.outputs.has_relevant_commits == 'true'
+        run: |
+          git push --follow-tags origin main
